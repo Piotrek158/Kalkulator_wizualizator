@@ -1,0 +1,23 @@
+{
+    "menu": {
+      "auto": "Auto",
+      "manual": "Ręczny",
+      "palletList": "Lista Palet"
+    },
+    "popup": {
+      "title": "Podaj Detale Palety Technicznej",
+      "fields": {
+        "palletCount": "Ilość Palet",
+        "length": "Długość",
+        "width": "Szerokość",
+        "height": "Wysokość",
+        "netWeight": "Waga Netto",
+        "grossWeight": "Waga Brutto"
+      },
+      "buttons": {
+        "add": "Dodaj",
+        "cancel": "Anuluj"
+      }
+    }
+}
+  

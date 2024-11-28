@@ -266,7 +266,7 @@
     <div class="menu">
         <button id="auto_btn" onclick="menu(this.id)"><p>Auto</p></button>
         <button id="manual_btn" onclick="menu(this.id)"><p>Manual</p></button>
-        <button id="lista_palet_btn" onclick="menu(this.id)"><p>Spis palet</p></button>
+        <button id="lista_palet_btn" data-translate="menu.palletList" onclick="menu(this.id)"></button>
     </div>
     <div class='content'>
         <div id="menuContent"></div>
@@ -328,6 +328,39 @@
 
 
     <script>
+        let translations = {};
+        let currentLanguage = 'en';
+
+        async function loadTranslations(language) {
+            const baseURL = "";
+            const url = `${baseURL}${language}.json`;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Nie udało się wczytać ${language} error_code: A-12`);
+                }
+                translations = await response.json();
+                currentLanguage = language;
+                translatePage();
+            } catch (error) {
+                console.error("Error loading translations:", error);
+                alert("Could not load translations. Please try again later.");
+            }
+        }
+
+        function translatePage() {
+            document.querySelectorAll("[data-translate]").forEach(element => {
+                const key = element.getAttribute("data-translate");
+                const translation = key.split('.').reduce((obj, i) => obj?.[i], translations);
+                if (translation) {
+                    element.innerText = translation;
+                }
+            });
+        }
+
+        loadTranslations(currentLanguage);
+
         function autofillDimensions(option){
             const palletData = {
                 "OP.PALETA 1.2M": { length: 120, width: 120, height: 12, weight: 14.1 },

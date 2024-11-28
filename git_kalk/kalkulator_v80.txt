@@ -1,0 +1,1916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator palet v 0.8.0</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f4f8;
+            color: #333;
+            margin: 0;
+        }
+        label {
+            display: inline-block;
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+            position: relative;
+            padding-left: 35px;
+        }
+        input[type="text"], input[type="number"], select {
+            width: 80%;
+            padding: 10px;
+            font-size: 14px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        input[type="radio"] {
+            display: none;
+        }
+        input[type="radio"] + label:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 25px;
+            height: 25px;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            background: white;
+        }
+        input[type="radio"]:checked + label:before {
+            border-color: #4CAF50;
+        }
+        input[type="radio"]:checked + label:after {
+            content: '';
+            position: absolute;
+            left: 9px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: #4CAF50;
+        }
+        button {
+            padding: 12px 25px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #wyniki {
+            margin-top: 20px;
+            font-size: 16px;
+            text-align: left;
+            margin: 0 auto;
+            width: 80%;
+        }
+        .grupa {
+            margin-bottom: 20px;
+        }
+        .najwyzsza-wartosc {
+            font-weight: bold;
+            color: #FF0000;
+        }
+        .czerwony-tekst {
+            color: red;
+            font-weight: bold;
+        }
+        .podsumowanie {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .menu {
+            width: 100%;
+            background-color: #4CAF50;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .menu button {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .menu button:hover {
+            background-color: white;
+            color: #4CAF50;
+        }
+        .content {
+            padding-top: 20px;
+            display: flex;
+            justify-content: center;
+            margin: 0 auto;
+            width: 80%;
+        }
+        .wrapper {
+            width: 100%;
+            min-height: 10vh;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+        .input_1, .input_2, .btn_d, .szer_retro, .input_ark_ins {
+            width: 100%;
+            padding-top: 2vh;
+        }
+        .btn_d {
+            text-align: center;
+        }
+        .szer_retro {
+            width: 20%;
+        }
+        .dynamic-rows {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .dynamic-rows .row {
+            margin-bottom: 10px;
+        }
+        .dynamic-rows select {
+            width: auto;
+            padding: 10px;
+        }
+        .dynamic-rows button {
+            margin-left: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            text-align: left;
+            margin: 0 auto;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 12px;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+        .hidden {
+            display: none;
+        }
+        #dot {
+            width: 20px;
+            height: 20px;
+            background-color: red; 
+            border-radius: 50%; 
+            display: inline-block;
+            
+        }
+        #dot2 {
+            width: 20px;
+            height: 20px;
+            background-color: red; 
+            border-radius: 50%; 
+            display: inline-block;
+            
+        }
+        #popupForm {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: white;
+            border: 2px solid black;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        #popupOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px; 
+        }
+
+        .input-group select {
+            flex: 3; 
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .input-group input[type="text"] {
+            flex: 7; 
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .radio-group input[type="radio"] {
+            display: inline-block; 
+            margin-bottom: 5px; 
+        }
+
+        .radio-group label {
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="menu">
+        <button id="auto_btn" onclick="menu(this.id)"><p>Auto</p></button>
+        <button id="manual_btn" onclick="menu(this.id)"><p>Manual</p></button>
+        <button id="lista_palet_btn" onclick="menu(this.id)"><p>Spis palet</p></button>
+    </div>
+    <div class='content'>
+        <div id="menuContent"></div>
+    </div>
+    <div id="popupOverlay"></div>
+
+    <div id="popupForm">
+        <h2>Podaj detale palety tech.</h2>
+        <form id="palletForm">
+            <select id="palletDropdown" onchange="autofillDimensions(this.value)">
+                <option value="">Wybierz ze spisu</option>
+                <option value="OP.PALETA 1.2M">OP.PALETA 1.2M</option>
+                <option value="OP.PALETA 1.8M">OP.PALETA 1.8M</option>
+                <option value="OP.PALETA 2M">OP.PALETA 2M</option>
+                <option value="OP.PALETA 3M">OP.PALETA 3M</option>
+                <option value="OP.PALETA 4M">OP.PALETA 4M</option>
+                <option value="OP.PALETA 5M">OP.PALETA 5M</option>
+                <option value="OP.PALETA 6M">OP.PALETA 6M</option>
+                <option value="PALETA DO MODUŁÓW">PALETA DO MODUŁÓW</option>
+                <option value="OP.PALETA.PANEL.1">OP.PALETA.PANEL.1</option>
+                <option value="OP.PALETA.PANEL.3">OP.PALETA.PANEL.3</option>
+                <option value="OP.PALETA.PANEL.5">OP.PALETA.PANEL.5</option>
+                <option value="PALETA BTR 113x140">PALETA BTR 113x140</option>
+            </select>
+
+            <label for="pallets">Ilość palet:</label>
+            <input type="number" id="pallets" name="pallets" required>
+    
+            <label for="length">Długość:</label>
+            <input type="number" id="length" name="length" required>
+    
+            <label for="width">Szerokość:</label>
+            <input type="number" id="width" name="width" required>
+    
+            <label for="height">Wysokość:</label>
+            <input type="number" id="height" name="height" required>
+    
+            <label for="netWeight">Waga netto:</label>
+            <input type="number" id="netWeight" name="netWeight" required>
+    
+            <label for="grossWeight">Waga brutto:</label>
+            <input type="number" id="grossWeight" name="grossWeight" placeholder="" required>
+    
+            <label for="nazwaGL">Nazwa:</label>
+            <input type="text" id="nazwaGL" name="nazwaGL" required>
+    
+            <label for="pietrowalnosc">Piętrowalność:</label>
+            <input type="checkbox" id="pietrowalnosc" name="pietrowalnosc" value="Tak">
+            <label for="pietrowalnosc"></label><br>
+
+            <label for="palletID">ID (nie uzupelniac):</label>
+            <input type="text" id="palletID" name="palletID" readonly><br>
+    
+            <button type="button" onclick="submitForm()">Dodaj</button>
+            <button type="button" onclick="hidePopup(true)">Anuluj</button>
+        </form>
+    </div>
+    
+
+
+    <script>
+        function autofillDimensions(option){
+            const palletData = {
+                "OP.PALETA 1.2M": { length: 120, width: 120, height: 12, weight: 14.1 },
+                "OP.PALETA 1.8M": { length: 180, width: 120, height: 12, weight: 21.6 },
+                "OP.PALETA 2M": { length: 200, width: 120, height: 12, weight: 26.0 },
+                "OP.PALETA 3M": { length: 300, width: 120, height: 12, weight: 36.5 },
+                "OP.PALETA 4M": { length: 400, width: 120, height: 12, weight: 44.1 },
+                "OP.PALETA 5M": { length: 500, width: 120, height: 12, weight: 58.0 },
+                "OP.PALETA 6M": { length: 600, width: 120, height: 12, weight: 67.5 },
+                "PALETA DO MODUŁÓW": { length: 120, width: 130, height: 15.5, weight: 18.5 },
+                "OP.PALETA.PANEL.1": { length: 138, width: 59.5, height: 69.7, weight: 16.8 },
+                "OP.PALETA.PANEL.3": { length: 300, width: 59.5, height: 69.7, weight: 32.1 },
+                "OP.PALETA.PANEL.5": { length: 492, width: 59.5, height: 69.7, weight: 47.8 },
+                "PALETA BTR 113x140": { length: 140, width: 113, height: 19.2, weight: 22.5 }
+        };
+        document.getElementById('length').value = palletData[option].length;
+        document.getElementById('width').value = palletData[option].width;
+        let waga_net = document.getElementById('netWeight').value;
+        let wysokosc = document.getElementById('height').value;
+        waga_net ? document.getElementById('grossWeight').value = (Number(palletData[option].weight) + Number(waga_net)).toFixed(2) : "";
+        if (option.includes('PANEL')) {
+            document.getElementById('height').value = palletData[option].height;
+        } else if (wysokosc) {
+            document.getElementById('height').value = Number(palletData[option].height) + Number(wysokosc);
+        } else {
+            document.getElementById('height').value = "";
+        }
+        }
+
+        function exportTableToExcel() {
+            var table = document.querySelector("#generatedTableContainer table");
+            if (!table) return;
+
+            var csvContent = "";
+            var rows = table.querySelectorAll("tr");
+
+            rows.forEach(row => {
+                var rowData = [];
+                var cols = row.querySelectorAll("th, td");
+
+                cols.forEach(col => {
+                    rowData.push(col.textContent);
+                });
+
+                csvContent += rowData.join(",") + "\n";
+            });
+
+            var blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+            var link = document.createElement("a");
+            if (link.download !== undefined) {
+                var url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", "table.csv");
+                link.style.visibility = "hidden";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+let jsonData = [];
+        function menu(id) {
+            let menuContent = document.getElementById("menuContent");
+            menuContent.innerHTML = "";
+            switch(id) {
+                case 'auto_btn':
+                    menuContent.innerHTML = `
+                        <div id="trybPracy" style="display: none;">auto</div>
+                        <div class="dynamic-rows">
+                                <input type="file" id="fileUpload" accept=".xls,.xlsx" /><br><br>
+                                <button onclick="handleFile()">Wczytaj plik Excel</button><br><br>
+                                <button onclick="znajdz_zaznaczone_do_grupowania(jsonData)">Grupuj</button><br><br>
+                                <div class="button-group">
+
+                                    <button onclick="showPopup()">Dodaj paletę techniczną</button>
+                                    <button onclick="clearAllRows()">Wyczyść Obliczenia</button>
+                                    <button onclick="reloadPage()">Zacznij od nowa</button>
+                                    <button onclick="widoczne_niewidoczne()">Pokaż-ukryj szczegóły</button><br><br>  <br />
+                                </div>
+                                <form class="radio-group">
+                                    <label for="kontener1">
+                                        <input type="radio" id="kontener1" name="kontener" value="20" checked="checked">
+                                        Kontener 20''
+                                    </label>
+                                    <label for="kontener2">
+                                        <input type="radio" id="kontener2" name="kontener" value="40">
+                                        Kontener 40''
+                                    </label>
+                                    <label for="kontener3">
+                                        <input type="radio" id="kontener3" name="kontener" value="40HC">
+                                        Kontener 40'' HC
+                                    </label>
+                                    <label for="naczepa">
+                                        <input type="radio" id="naczepa" name="kontener" value="Naczepa">
+                                        Naczepa
+                                    </label>
+                                    <label for="auto26">
+                                        <input type="radio" id="auto26" name="kontener" value="auto26">
+                                        Auto 26T
+                                    </label>
+                                </form>   
+                                    <div class="rowsContainerClass" id="rowsContainer">
+                                    </div>
+                                    <div id='podsumowanie' class='podsumowanie'></div><br><br>
+                                    <button onclick="programAuto(jsonData)">Generuj rozwiązanie</button><div id="dot"></div><br><br> 
+                                    
+                                    <div id='wyniki' style='display:none;'></div>
+                                    <button onclick="generateTable()">Generuj eksport</button><div id="dot2"></div><br><br>
+                                    <div id="generatedTableContainer" style='display:none;'></div><br><br>
+                                    <button onclick="exportTableToExcel()">Eksportuj do GoodLoading</button><br><br>
+                                    <form class="radio-group">
+                                        <label for="Standard">
+                                            <input type="radio" id="Standard" name="typPL" value="1" checked="checked">
+                                            Standardowy packing list
+                                        </label>
+                                        <label for="exp">
+                                            <input type="radio" id="exp" name="typPL" value="2">
+                                            Rozbudowany packing list (może zawierać błędy)
+                                        </label>
+                                    </form>   
+                                    <button onclick="exportPackingListToExcel()">Eksportuj packing list</button><br><br>
+                        </div>
+                    `;
+                    break;
+                case 'manual_btn':
+                    menuContent.innerHTML = `
+                    <div id="trybPracy" style="display: none;">manual</div>
+                    <h3>*Wyliczone wagi są wartościami poglądowymi! <br>
+                        *przy pakowaniu blach trapezowych wysokość paczki jest podawana indywidualnie dla zamówienia<br><br> </h3><br>
+                        <div class="dynamic-rows">
+                            <div class="row">
+                                <div class="input-group">
+                                        <select id="positionSelect">
+                                            <option value="TERRANO">TERRANO</option>
+                                            <option value="RETRO">RETRO</option>
+                                            <option value="DACHÓWKI">DACHÓWKI</option>
+                                            <option value="TRAPEZ">TRAPEZ</option>
+                                            <option value="ARKUSZE">ARKUSZE</option>
+                                            <option value="PŁASKA">PŁASKA NA WYMIAR</option>
+                                        </select>
+
+                                        <input type="text" id="rowTextInput" placeholder="ilość x długość | ilość x długość - na przykład 5 x 4,5 | 6 x 3,2">
+                                        <input type="text" id="rowWeightInput" placeholder="Waga w tonach np. 0,75">
+
+                                        <button onclick="addRow()">Dodaj</button>
+                                </div>
+                                <div class="button-group">
+
+                                    <button onclick="showPopup()">Dodaj paletę techniczną</button>
+                                    <button onclick="clearAllRows()">Wyczyść Obliczenia</button>
+                                    <button onclick="reloadPage()">Zacznij od nowa</button> <br />
+                                </div>
+                                <form class="radio-group">
+                                    <label for="kontener1">
+                                        <input type="radio" id="kontener1" name="kontener" value="20" checked="checked">
+                                        Kontener 20''
+                                    </label>
+                                    <label for="kontener2">
+                                        <input type="radio" id="kontener2" name="kontener" value="40">
+                                        Kontener 40''
+                                    </label>
+                                    <label for="kontener3">
+                                        <input type="radio" id="kontener3" name="kontener" value="40HC">
+                                        Kontener 40'' HC
+                                    </label>
+                                    <label for="naczepa">
+                                        <input type="radio" id="naczepa" name="kontener" value="Naczepa">
+                                        Naczepa
+                                    </label>
+                                    <label for="auto26">
+                                        <input type="radio" id="auto26" name="kontener" value="auto26">
+                                        Auto 26T
+                                    </label>
+                                </form>
+                            </div>
+                            <div id="rowsContainer"></div>
+                        </div>
+                            <div id='wyniki'></div>
+                            <div id='podsumowanie' class='podsumowanie'></div><br><br>
+                            <button onclick="generateTable()">Generuj tabelkę</button><br><br>
+                            <div id="generatedTableContainer"></div><br><br>
+                            <button onclick="exportTableToExcel()">Eksportuj do GoodLoading</button><br><br>
+                            <button onclick="exportPackingListToExcel()">Eksportuj packing list</button><br><br>
+                    `;
+                    break;
+                case 'lista_palet_btn':
+                    menuContent.innerHTML = `
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Indeks palety</th>
+                                    <th>Długość</th>
+                                    <th>Szerokość</th>
+                                    <th>Wysokość</th>
+                                    <th>Waga</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>OP.PALETA 1.2M</td>
+                                    <td>120</td>
+                                    <td>120</td>
+                                    <td>12</td>
+                                    <td>14,1</td>
+                                </tr>
+                                <tr>
+                                    <td>OP.PALETA 1.8M</td>
+                                    <td>180</td>
+                                    <td>120</td>
+                                    <td>12</td>
+                                    <td>21,6</td>
+                                </tr>
+                                <tr>
+                                    <td>OP.PALETA 2M</td>
+                                    <td>200</td>
+                                    <td>120</td>
+                                    <td>12</td>
+                                    <td>26,0</td>
+                                </tr>
+                                <tr>
+                                    <td>OP.PALETA 3M</td>
+                                    <td>301</td>
+                                    <td>120</td>
+                                    <td>12</td>
+                                    <td>36,5</td>
+                                </tr>
+                                <tr>
+                                    <td>OP.PALETA 4M</td>
+                                    <td>400</td>
+                                    <td>120</td>
+                                    <td>12</td>
+                                    <td>44,1</td>
+                                </tr>
+                                <tr>
+                                    <td>OP.PALETA 5M</td>
+                                    <td>500</td>
+                                    <td>120</td>
+                                    <td>12</td>
+                                    <td>58,0</td>
+                                </tr>
+                                <tr>
+                                    <td>OP.PALETA 6M</td>
+                                    <td>600</td>
+                                    <td>120</td>
+                                    <td>12</td>
+                                    <td>67,5</td>
+                                </tr>
+                                <tr>
+                                    <td>PALETA DO MODUŁÓW</td>
+                                    <td>120</td>
+                                    <td>130</td>
+                                    <td>15,5</td>
+                                    <td>18,5</td>
+                                </tr>
+                                <tr>
+                                    <td>OP.PALETA.PANEL.1</td>
+                                    <td>138</td>
+                                    <td>59,5</td>
+                                    <td>69,7</td>
+                                    <td>16,8</td>
+                                </tr>
+                                <tr>
+                                    <td>OP.PALETA.PANEL.3</td>
+                                    <td>300</td>
+                                    <td>59,5</td>
+                                    <td>69,7</td>
+                                    <td>32,1</td>
+                                </tr>
+                                <tr>
+                                    <td>OP.PALETA PANEL.5</td>
+                                    <td>492</td>
+                                    <td>59,5</td>
+                                    <td>69,7</td>
+                                    <td>47,8</td>
+                                </tr>
+                                <tr>
+                                    <td>PALETA BTR 113x140</td>
+                                    <td>140</td>
+                                    <td>113</td>
+                                    <td>19,2</td>
+                                    <td>22,5</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    `;
+                    break;
+                default:
+                    menuContent.innerHTML = "<h2>Wybierz opcję</h2>";
+            }
+        }
+
+        function widoczne_niewidoczne(){
+            let kont = document.getElementById('wyniki');
+            if (kont.style.display === "none") {
+                kont.style.display = "block";
+            } else {
+                kont.style.display = "none";
+            }
+            let kont2 = document.getElementById('generatedTableContainer');
+            if (kont2.style.display === "none") {
+                kont2.style.display = "block";
+            } else {
+                kont2.style.display = "none";
+            }
+        }
+        function kropka_zielona_czerwona() {
+            var dot = document.getElementById("dot");
+            if (dot.style.backgroundColor === "" || dot.style.backgroundColor === "red") {
+                dot.style.backgroundColor = "green"; 
+            } else {
+                dot.style.backgroundColor = "red"; 
+            }
+        }
+        function kropka_zielona_czerwona2() {
+            var dot = document.getElementById("dot2");
+            if (dot.style.backgroundColor === "" || dot.style.backgroundColor === "red") {
+                dot.style.backgroundColor = "green"; 
+            } else {
+                dot.style.backgroundColor = "red"; 
+            }
+        }
+        function kropka_czerwona() {
+
+            var dot = document.getElementById("dot");
+            dot.style.backgroundColor = "red";
+            var dot = document.getElementById("dot2");
+            dot.style.backgroundColor = "red";
+        }
+
+
+        function programAuto(jsonData){
+            //clearAllRows();
+            kropka_zielona_czerwona();
+            jsonData.forEach ((row, index) => {
+                const ZS = row['Zamowienie_Numer'];
+                const ilosc_x_dlugosc = row['ilosc x dlugosc'];
+                const sposob_podzialu = row['Podzial_Sposob'];
+                const profil_nazwa = row['Profil_Nazwa'];
+                const grubosc = (row['Surowiec_Grubosc'])/100;
+                const jednostka_waga = (row['waga_jednostka']);
+                const sum_jednostek = (row['Metry']);
+                const sum_waga = (row['Waga']);
+                const jm = (row['Twr_Jm']);
+                const waga_kg = row['waga_MB'];
+                const LP_dok = row['LP_dok'];
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'row';
+                if (sposob_podzialu === 'RETRO') {
+                    executeRowActionAuto(ZS, sposob_podzialu, ilosc_x_dlugosc.replace(/'/g, "\\'"), profil_nazwa, jednostka_waga, null, LP_dok);
+                } else if (sposob_podzialu === 'TRAPEZ' || sposob_podzialu === 'PŁASKA' || sposob_podzialu === 'DACHÓWKI') {
+                    executeRowActionAuto(ZS, sposob_podzialu, ilosc_x_dlugosc.replace(/'/g, "\\'"), null, jednostka_waga, null, LP_dok)
+                } else {
+                    executeRowActionAuto(ZS, sposob_podzialu, ilosc_x_dlugosc.replace(/'/g, "\\'"), null, jednostka_waga, grubosc, LP_dok)
+                }
+                const rowsContainer = document.getElementById('rowsContainer');
+                rowsContainer.appendChild(rowDiv);
+            });
+        }
+        
+        function zamien_w_tech(id, jsonData){
+            document.getElementById('palletID').value = jsonData[id]['LP_dok'];
+            document.getElementById('netWeight').value = Number(jsonData[id]['Waga']);
+            refreshData(id, jsonData);
+            showPopup();
+        }
+
+        function znajdz_zaznaczone_do_grupowania(jsonData){
+            let do_grupowania = [];
+            const divGlowny = document.querySelectorAll('#rowsContainer > div');
+            divGlowny.forEach (div => {
+                const checkbox = div.querySelector('input[type="checkbox"]');
+                if(checkbox!= null && checkbox.checked){
+                    let id = div.id.split('-');
+                    do_grupowania.push(Number(id[1]));
+                }
+            });
+            do_grupowania.reverse();
+            //addRowAuto(null, 'GRUPA', null, null, null, null ,null, null, null, null, null, null);
+            let pozycje_grupy = [];
+            let waga_grupy = 0.0;
+            do_grupowania.forEach(id =>{
+                pozycje_grupy.push(jsonData[id]['LP_dok']);
+                waga_grupy += Number(jsonData[id]['Waga']);
+                refreshData(id, jsonData);
+            });
+            document.getElementById('palletID').value = pozycje_grupy;
+            document.getElementById('netWeight').value = waga_grupy.toFixed(2);
+            showPopup();
+        }
+
+        function addRowAuto(ZS, sposob_podzialu, ilosc_x_dlugosc, profil_nazwa, grubosc, jednostka_waga, sum_jednostek, sum_waga, jm, jsonData, i, LP_dok){
+            const rowDiv = document.createElement('div');
+            rowDiv.className = 'row';
+            rowDiv.id = `row-${i}`;
+            if (sposob_podzialu === 'RETRO') {
+                const uniqueId = `retroOptionSelect${Date.now()}`;
+                rowDiv.innerHTML = `
+                    <strong>${sposob_podzialu}</strong>: ${ilosc_x_dlugosc}
+                    <strong>
+                        ${profil_nazwa}
+                    </strong>
+                    <button id="${i}" onclick="deleteRow(this, this.id, jsonData)">Usuń</button>
+                    <button id="${i}" onclick="zamien_w_tech(this.id, jsonData)">Przerób na techniczną</button>
+                `;
+            } else if (sposob_podzialu === 'TRAPEZ' || sposob_podzialu === 'PŁASKA' || sposob_podzialu === 'DACHÓWKI') {
+                const uniqueId = `${sposob_podzialu}OptionSelect${Date.now()}`;
+                rowDiv.innerHTML = `
+                    <strong>${sposob_podzialu}</strong>: ${ilosc_x_dlugosc}
+                    <div style="display: inline-flex; align-items: center;">
+                        <span style="margin-right: 10px;">Grubość blachy:</span>
+                        <strong>
+                            ${grubosc}
+                        </strong>
+                    </div>
+                    <button id="${i}" onclick="deleteRow(this, this.id, jsonData)">Usuń</button>
+                    <button id="${i}" onclick="zamien_w_tech(this.id, jsonData)">Przerób na techniczną</button>
+                `;
+            } else if (sposob_podzialu == 'TERRANO')
+                {
+                rowDiv.innerHTML = `
+                    <strong>${sposob_podzialu}</strong>: ${ilosc_x_dlugosc}
+                    <button id="${i}" onclick="deleteRow(this, this.id, jsonData)">Usuń</button>
+                    <button id="${i}" onclick="zamien_w_tech(this.id, jsonData)">Przerób na techniczną</button>
+                `;
+            }
+            else if(sposob_podzialu === 'INNY'){
+                rowDiv.innerHTML = `
+                    <strong>${sposob_podzialu}, ${profil_nazwa}</strong>: ${ilosc_x_dlugosc}
+                    <button id="${i}" onclick="deleteRow(this, this.id, jsonData)">Usuń</button>
+                    <button id="${i}" onclick="zamien_w_tech(this.id, jsonData)">Przerób na techniczną</button>
+                    <input type="checkbox" id="inny_grupuj" name="inny_grupuj" value="Zaznacz"> Wybierz do grupowania
+
+                `;
+            } else if (sposob_podzialu === 'GRUPA'){
+                rowDiv.innerHTML = `
+                    <strong>${sposob_podzialu}</strong>
+                    <button id="${i}" onclick="deleteRow(this, this.id, jsonData)">Usuń</button>
+                    <button id="${i}" onclick="zamien_w_tech(this.id, jsonData)">Przerób na techniczną</button>
+                `;
+            } else {
+                rowDiv.innerHTML = `
+                    <strong>${sposob_podzialu}</strong>: ${ilosc_x_dlugosc}
+                    <button id="${i}" onclick="deleteRow(this, this.id, jsonData)">Usuń</button>
+                    <button id="${i}" onclick="zamien_w_tech(this.id, jsonData)">Przerób na techniczną</button>
+                `;
+            }
+
+            const rowsContainer = document.getElementById('rowsContainer');
+            rowsContainer.appendChild(rowDiv);
+        }
+
+        function addRow() {
+            const position = document.getElementById('positionSelect').value;
+            const text = document.getElementById('rowTextInput').value;
+
+            const rowDiv = document.createElement('div');
+            rowDiv.className = 'row';
+
+            if (position === 'RETRO') {
+                const uniqueId = `retroOptionSelect${Date.now()}`;
+                rowDiv.innerHTML = `
+                    <strong>${position}</strong>: ${text}
+                    <select id="${uniqueId}">
+                        <option value="PANEL RETRO 25/239">PANEL RETRO 25/239</option>
+                        <option value="PANEL RETRO 25/340">PANEL RETRO 25/340</option>
+                        <option value="PANEL RETRO 25/554">PANEL RETRO 25/554</option>
+                        <option value="PANEL RETRO 38/315">PANEL RETRO 38/315</option>
+                        <option value="PANEL RETRO 38/559">PANEL RETRO 38/559</option>
+                    </select>
+                    <button onclick="executeRowAction('${position}', '${text.replace(/'/g, "\\'")}', '${uniqueId}')">Przelicz</button>
+                    <button onclick="deleteRow(this)">Usuń</button>
+                `;
+            } else if (position === 'TRAPEZ' || position === 'PŁASKA' || position === 'DACHÓWKI') {
+                const uniqueId = `${position}OptionSelect${Date.now()}`;
+                rowDiv.innerHTML = `
+                    <strong>${position}</strong>: ${text}
+                    <div style="display: inline-flex; align-items: center;">
+                        <span style="margin-right: 10px;">Grubość blachy:</span>
+                        <input type="radio" id="${uniqueId}_05" name="${position}OptionSelect_radio" value="0.5" checked>
+                        <label for="${uniqueId}_05" style="margin-right: 10px;">0.5</label>
+                        <input type="radio" id="${uniqueId}_07" name="${position}OptionSelect_radio" value="0.7">
+                        <label for="${uniqueId}_07">0.7</label>
+                    </div>
+                    <button onclick="executeRowAction('${position}', '${text.replace(/'/g, "\\'")}', '${uniqueId}')">Przelicz</button>
+                    <button onclick="deleteRow(this)">Usuń</button>
+                `;
+            } else {
+                rowDiv.innerHTML = `
+                    <strong>${position}</strong>: ${text}
+                    <button onclick="executeRowAction('${position}', '${text.replace(/'/g, "\\'")}', null)">Przelicz</button>
+                    <button onclick="deleteRow(this)">Usuń</button>
+                `;
+            }
+
+            const rowsContainer = document.getElementById('rowsContainer');
+            rowsContainer.appendChild(rowDiv);
+        }
+
+        function deleteRow(button, id, jsonData) {
+            let trybPracy = document.getElementById('trybPracy').innerText;
+            if(trybPracy === 'auto'){
+                kropka_czerwona();
+            }
+            const row = button.parentNode;
+            row.remove();
+            refreshData(button.id, jsonData);
+        }
+
+        function refreshData(id, jsonData){
+            let trybPracy = document.getElementById('trybPracy').innerText;
+            if(trybPracy === 'auto'){
+                jsonData.splice(id,1);
+                let rowsContainer = document.getElementById('rowsContainer');
+                rowsContainer.innerHTML = '';
+            }
+            var i =0;
+
+            if(trybPracy === 'auto'){
+                jsonData.forEach(row => {
+                    const ZS = row['Zamowienie_Numer'];
+                    const ilosc_x_dlugosc = row['ilosc x dlugosc'];
+                    const sposob_podzialu = row['Podzial_Sposob'];
+                    const profil_nazwa = row['Profil_Nazwa'];
+                    const grubosc = (row['Surowiec_Grubosc'])/100;
+                    const jednostka_waga = (row['waga_jednostka']);
+                    const sum_jednostek = (row['Metry']);
+                    const sum_waga = (row['Waga']);
+                    const jm = (row['Twr_Jm']);
+                    const waga_kg = row['waga_MB'];
+                    const LP_dok = row['LP_dok'];
+                    addRowAuto(ZS, sposob_podzialu, ilosc_x_dlugosc, profil_nazwa, grubosc, jednostka_waga, sum_jednostek, sum_waga, jm, jsonData, i, LP_dok);
+                    i++;
+                });
+            }
+    
+        }
+
+        function clearAllRows() {
+            const wynikiDiv = document.getElementById('wyniki');
+            wynikiDiv.innerHTML = '';
+        }
+
+        function executeRowAction(position, text, selectId) {
+            console.log(selectId);
+            if (position === 'RETRO') {
+                const retroOption = document.getElementById(selectId).value;
+                executeRetroAction(text, retroOption);
+            } else {
+                switch (position) {
+                    case 'TERRANO':
+                        executeTerranoAction(text);
+                        break;
+                    case 'DACHÓWKI':
+                        executeDachowkiAction(text);
+                        break;
+                    case 'TRAPEZ':
+                        executeTrapezyAction(text);
+                        break;
+                    case 'ARKUSZE':
+                        executeArkuszeAction(text);
+                        break;
+                    case 'PŁASKA':
+                        executePlaskaAction(text);
+                        break;
+                    case 'Paleta techniczna':
+                        executeTechnicznaAction(text);
+                        break;
+                    default:
+                        console.error('nieznane:', position);
+                }
+            }
+        }
+        function executeRowActionAuto(ZS, position, text, retroOption, waga_kg, grubosc, LP_dok) {
+            if (position === 'RETRO') {
+                executeRetroAction(ZS, text, retroOption, waga_kg, LP_dok);
+            } else {
+                switch (position) {
+                    case 'TERRANO':
+                        executeTerranoAction(text, waga_kg, LP_dok);
+                        break;
+                    case 'DACHÓWKI':
+                        executeDachowkiAction(text, waga_kg, LP_dok);
+                        break;
+                    case 'TRAPEZ':
+                        executeTrapezyAction(text, waga_kg, LP_dok);
+                        break;
+                    case 'ARKUSZE':
+                        executeArkuszeAction(text, waga_kg, LP_dok);
+                        break;
+                    case 'PŁASKA':
+                        executePlaskaAction(text, waga_kg, grubosc, LP_dok);
+                        break;
+                    case 'Paleta techniczna':
+                        executeTechnicznaAction(text, palletID);
+                        break;
+                    default:
+                        console.error('nieznane:', position);
+                }
+            }
+        }
+
+        function executePlaskaAction(text, wagakg, grubosc, LP_dok) {
+    let wynikiPoPierwszymPodziale = text.split("|");
+    let tablicaDwuwymiarowa = [];
+    //let LP_dok;
+
+    for (let i = 0; i < wynikiPoPierwszymPodziale.length; i++) {
+        let wiersz = wynikiPoPierwszymPodziale[i].split("x");
+        tablicaDwuwymiarowa.push([parseInt(wiersz[0].trim()), parseFloat(wiersz[1].trim().replace(",", "."))]);
+    }
+
+
+    tablicaDwuwymiarowa.sort(function(a, b) {
+        return b[1] - a[1];
+    });
+
+    let wynikiDiv = document.getElementById("wyniki");
+    let wymiar = parseFloat(tablicaDwuwymiarowa[0][0]);
+    let wymiar_dl = parseFloat(tablicaDwuwymiarowa[0][1]);
+    let dlugosz_zal_grubosc = wymiar_dl;
+    const selectedRadio = document.querySelector('input[name="PŁASKAOptionSelect_radio"]:checked');
+    let mnoznik=1;
+    let waga_kg=wagakg;
+    if (selectedRadio) {
+        mnoznik = selectedRadio.value === '0.7' ? 1.5 : 1;
+        waga_kg = selectedRadio.value === '0.7' ? 6.1 : 4.4;
+    }
+    mnoznik = grubosc === '0.7' ? 1.5 : 1;
+    if(wymiar_dl>=10 && wymiar_dl<=30 && mnoznik ===1.5){
+        dlugosz_zal_grubosc=dlugosz_zal_grubosc*mnoznik;
+    }    
+    
+    let wynik, reszta, kolekcja;
+
+    if(dlugosz_zal_grubosc<=3){
+        if(dlugosz_zal_grubosc<=2){
+            var paletaOpis = "OP.PALETA.2M";
+            var paletaDlugosc = 2;
+            var plaetaWaga = 26;
+        }else{
+            var paletaOpis = "OP.PALETA.3M";
+            var paletaDlugosc = 3;
+            var plaetaWaga = 36.5;
+        }
+        reszta = wymiar % 150;
+        wynik = Math.floor(wymiar / 150) + (reszta !== 0 ? 1 : 0);
+        kolekcja = Array(wynik).fill(150);
+        
+        if (reszta !== 0) {
+            kolekcja[kolekcja.length - 1] = reszta;
+        }
+        for (let i = 1; i <= kolekcja.length; i++) {
+            let newRow = document.createElement("div");
+            newRow.className = "grupa";
+            newRow.innerHTML = `Paleta nr ${i}: ${kolekcja[i - 1]} x ${wymiar_dl} | Łączna ilość arkuszy: ${kolekcja[i - 1]} | Maksymalna długość arkusza: ${Math.max(wymiar_dl)} | <br>`;
+            newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: ${paletaOpis} | Waga brutto: ${Math.round(((((wymiar_dl * waga_kg))*kolekcja[i - 1]) * 100) / 100)+Number(plaetaWaga)} kg | Waga netto: ${Math.round(((((wymiar_dl * waga_kg))*kolekcja[i - 1]) * 100) / 100)} kg | Dł-Szer-Wys: ${paletaDlugosc*100}-120-${12+((kolekcja[i - 1])*0.06)} | </span><br>Źródło: Płaska na wymiar | ID: ${LP_dok}`;
+            wynikiDiv.appendChild(newRow);
+        }
+    }
+    else if (dlugosz_zal_grubosc < 10) {
+        reszta = wymiar % 6;
+        wynik = Math.floor(wymiar / 6) + (reszta !== 0 ? 1 : 0);
+        kolekcja = Array(wynik).fill(6);
+        
+        if (reszta !== 0) {
+            kolekcja[kolekcja.length - 1] = reszta;
+        }
+
+        for (let i = 1; i <= kolekcja.length; i++) {
+            let newRow = document.createElement("div");
+            newRow.className = "grupa";
+            newRow.innerHTML = `Paleta nr ${i}: ${kolekcja[i-1]} x ${wymiar_dl} | Łączna ilość arkuszy: ${kolekcja[i - 1]} | Maksymalna długość arkusza: ${Math.max(wymiar_dl)} | <br>`;
+            newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: OP.PALETA.2M | Waga brutto: ${Math.round(((((wymiar_dl * waga_kg) + 15)*kolekcja[i - 1]) * 100) / 100)+26} kg | Waga netto: ${Math.round(((((wymiar_dl * waga_kg) + 15)*kolekcja[i - 1]) * 100) / 100)} kg | Dł-Szer-Wys: 120-80-139.5 | </span><br>Źródło: Płaska na wymiar | ID: ${LP_dok}`;
+            wynikiDiv.appendChild(newRow);
+        }
+    } else if (dlugosz_zal_grubosc <= 30) {
+        reszta = wymiar % 6;
+        wynik = Math.floor(wymiar / 6) + (reszta !== 0 ? 1 : 0);
+        kolekcja = Array(wynik).fill(6);
+
+        if (reszta !== 0) {
+            kolekcja[kolekcja.length - 1] = reszta;
+        }
+
+        for (let i = 1; i <= kolekcja.length; i++) {
+            let newRow = document.createElement("div");
+            newRow.className = "grupa";
+            newRow.innerHTML = `Paleta nr ${i}: ${kolekcja[i-1]} x ${wymiar_dl} | Łączna ilość arkuszy: ${kolekcja[i - 1]} | Maksymalna długość arkusza: ${Math.max(wymiar_dl)} | <br>`;
+            newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: OP.PALETA.2M | Waga brutto: ${Math.round(((((wymiar_dl * waga_kg) + 15)*kolekcja[i - 1]) * 100) / 100)+26} kg | Waga netto: ${Math.round(((((wymiar_dl * waga_kg) + 15)*kolekcja[i - 1]) * 100) / 100)} kg | Dł-Szer-Wys: 120-80-139.5 | </span><br>Źródło: Płaska na wymiar | ID: ${LP_dok}`;
+            wynikiDiv.appendChild(newRow);
+        }
+    } else if (dlugosz_zal_grubosc   <= 300) {
+        for (let i = 0; i < tablicaDwuwymiarowa[0][0]; i++) {
+            let newRow = document.createElement("div");
+            newRow.className = "grupa";
+            newRow.innerHTML = `Paleta nr ${i+1}: 1 x ${tablicaDwuwymiarowa[0][1]} | Łączna ilość arkuszy: 1 | Maksymalna długość arkusza: ${Math.max(wymiar_dl)} | <br>`;
+            newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: stelaż mały | Waga brutto: ${Math.round(((((wymiar_dl * waga_kg) + 15)*tablicaDwuwymiarowa[0][1]) * 100) / 100)+20} kg | Waga netto: ${Math.round((((wymiar_dl * waga_kg) + 15)*tablicaDwuwymiarowa[0][1]) * 100) / 100} | Dł-Szer-Wys: 124.5-74-80 | </span><br>Źródło: Płaska na wymiar | ID: ${LP_dok}`;
+            wynikiDiv.appendChild(newRow);
+        }
+    } else {
+        for (let i = 0; i < tablicaDwuwymiarowa[0][0]; i++) {
+            let newRow = document.createElement("div");
+            newRow.className = "grupa";
+            newRow.innerHTML = `Paleta nr ${i+1}: 1 x ${tablicaDwuwymiarowa[0][1]} | Łączna ilość arkuszy: 1 | Maksymalna długość arkusza: ${Math.max(wymiar_dl)} | <br>`;
+            newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: Stelaż duży | Waga brutto: ${Math.round(((((wymiar_dl * waga_kg) + 15)*tablicaDwuwymiarowa[0][1]) * 100) / 100)+20} kg | Waga netto: ${Math.round((((wymiar_dl * waga_kg) + 15)*tablicaDwuwymiarowa[0][1]) * 100) / 100} | Dł-Szer-Wys: 126-110.5-98 | </span><br>Źródło: Płaska na wymiar | ID: ${LP_dok}`;
+            wynikiDiv.appendChild(newRow);
+        }
+    }
+
+}
+
+        function reloadPage() {
+            location.reload();
+        }
+
+        function showPopup() {
+            document.getElementById('popupForm').style.display = 'block';
+            document.getElementById('popupOverlay').style.display = 'block';
+        }
+
+        function hidePopup(czysc = false) {
+            document.getElementById('popupForm').style.display = 'none';
+            document.getElementById('popupOverlay').style.display = 'none';
+            if(czysc){
+                const form = document.getElementById('palletForm');
+                form.reset();
+                hidePopup();
+            }
+        }
+
+        function cancelAndHidePopup() {
+
+        }
+
+        function submitForm() {
+            const form = document.getElementById('palletForm');
+            const formData = new FormData(form);
+
+            const tech_pallets = formData.get('pallets');
+            const tech_length = formData.get('length');
+            const tech_width = formData.get('width');
+            const tech_height = formData.get('height');
+            const tech_netWeight = formData.get('netWeight');
+            const tech_grossWeight = formData.get('grossWeight');
+            const tech_GLanme = formData.get('nazwaGL');
+            const tech_ptr = formData.get('pietrowalnosc');
+            const palletID = formData.get('palletID');
+
+            hidePopup();
+            executeTechnicznaAction(tech_pallets, tech_length, tech_width, tech_height, tech_netWeight, tech_grossWeight, tech_GLanme, tech_ptr, palletID);
+            form.reset();
+        }
+
+        function executeTechnicznaAction(tech_pallets, tech_length, tech_width, tech_height, tech_netWeight, tech_grossWeight, tech_GLanme, tech_ptr, palletID){
+            
+            if(tech_ptr == "Tak"){
+                var czy_ptr = "Y";
+            } else {
+                var czy_ptr = "N";
+            }
+            for (let i=0; i < tech_pallets; i++){
+                var newRow = document.createElement("div");
+                newRow.className = "grupa";
+                newRow.innerHTML = `Paleta nr ${i + 1}: ${tech_pallets} | Nazwa: ${tech_GLanme} | Piętrowalność: ${czy_ptr} | <br>`;
+                newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: PALETA TECHNICZNA | Waga brutto: ${tech_grossWeight} kg | Waga netto: ${tech_netWeight} kg | Dł-Szer-Wys: ${tech_length}-${tech_width}-${tech_height} | </span><br>Źródło: Paleta techniczna | ID: ${palletID}`;
+                var wynikiDiv = document.getElementById("wyniki");
+                wynikiDiv.appendChild(newRow);
+            }
+
+        }
+
+        function executeTerranoAction(text, waga_kg, LP_dok) {
+            let waga_total = Number(document.getElementById('rowWeightInput').value.replace(",", ".")) * 1000;
+            let wynikiPoPierwszymPodziale = text.split("|");
+            let tablicaDwuwymiarowa = [];
+            for (let i = 0; i < wynikiPoPierwszymPodziale.length; i++) {
+                let wiersz = wynikiPoPierwszymPodziale[i].split("x");
+                tablicaDwuwymiarowa.push([parseInt(wiersz[0].trim()), parseFloat(wiersz[1].trim().replace(",", "."))]);
+            }
+            tablicaDwuwymiarowa.sort(function(a, b) {
+                return b[1] - a[1];
+            });
+            let sumaMB = 0;
+            tablicaDwuwymiarowa.forEach(wymiar => {
+                sumaMB += wymiar[0] * wymiar[1]
+            });
+            var grupy = [];
+            var pozycjeWGrupie = 0;
+            var aktualnaGrupa = [];
+            for (let i = 0; i < tablicaDwuwymiarowa.length; i++) {
+                var ilosc = tablicaDwuwymiarowa[i][0];
+                while (ilosc > 0) {
+                    var wierszGrupy = [];
+                    var iloscDoDodania = Math.min(30 - pozycjeWGrupie, ilosc);
+                    wierszGrupy.push(iloscDoDodania + " x " + tablicaDwuwymiarowa[i][1]);
+                    ilosc -= iloscDoDodania;
+                    pozycjeWGrupie += iloscDoDodania;
+                    aktualnaGrupa.push([iloscDoDodania, tablicaDwuwymiarowa[i][1]]);
+                    if (pozycjeWGrupie >= 30) {
+                        grupy.push(aktualnaGrupa);
+                        aktualnaGrupa = [];
+                        pozycjeWGrupie = 0;
+                    }
+                }
+            }
+            if (aktualnaGrupa.length > 0) {
+                grupy.push(aktualnaGrupa);
+            }
+
+            var wynikiDiv = document.getElementById("wyniki");
+            if(waga_kg === undefined){
+                var waga_kg = 4.72;
+            }
+            if (waga_total){
+                var waga_kg = waga_total/sumaMB;
+                console.log(waga_kg);
+            }
+            for (var i = 0; i < grupy.length; i++) {
+                var maxWartosc = 0;
+                var totalSheets = 0;
+                var groupTexts = grupy[i].map(row => {
+                    var wartoscKolumny2 = parseFloat(row[1]);
+                    var iloscArkuszy = row[0];
+                    totalSheets += iloscArkuszy;
+                    if (wartoscKolumny2 > maxWartosc) {
+                        maxWartosc = wartoscKolumny2;
+                    }
+                    return `${row[0]} x ${row[1]}`;
+                }).join(", ");
+                let wagaPalety = grupy[i].reduce((sum, row) => sum + (row[0] * row[1] * waga_kg), 0).toFixed(2);
+                let wagaPaletyb = (grupy[i].reduce((sum, row) => sum + (row[0] * row[1] * waga_kg), 0)+20).toFixed(2);
+                let [paletaOpis, paletaDlugosc, caloscDlugosc, paletaWaga] = przypiszPaleteTerrano(maxWartosc);
+                var newRow = document.createElement("div");
+                newRow.className = "grupa";
+                newRow.innerHTML = `Paleta nr ${i + 1}: ${groupTexts} | Łączna ilość arkuszy: ${totalSheets} | Maksymalna długość arkusza: ${maxWartosc} | <br>`;
+                newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: ${paletaOpis} | Waga brutto: ${(Number(wagaPalety) + Number(paletaWaga)).toFixed(2)} kg | Waga netto: ${wagaPalety} kg | Dł-Szer-Wys: ${Math.round(((caloscDlugosc * 100) + Number.EPSILON) * 100) / 100}-60-69 | </span><br>Źródło: Terrano | ID: ${LP_dok}`;
+                wynikiDiv.appendChild(newRow);
+            }
+        }
+
+        function executeRetroAction(ZS, text, retroOption, waga_kg, LP_dok) {
+            console.log(retroOption, text)
+            var iloscDoPodzialu = wybSzerRetro(retroOption, text);
+            var wynikiPoPierwszymPodziale = text.split("|");
+            var tablicaDwuwymiarowa = [];
+            for (var i = 0; i < wynikiPoPierwszymPodziale.length; i++) {
+                var wiersz = wynikiPoPierwszymPodziale[i].split("x");
+                tablicaDwuwymiarowa.push([parseInt(wiersz[0].trim()), parseFloat(wiersz[1].trim().replace(",", "."))]);
+            }
+            tablicaDwuwymiarowa.sort(function(a, b) {
+                return b[1] - a[1];
+            });
+
+            var grupy = [];
+            var pozycjeWGrupie = 0;
+            var aktualnaGrupa = [];
+
+            function getRetroWeight(option) {
+                switch(option) {
+                    case "PANEL RETRO 25/239":
+                        return 1.0;
+                    case "PANEL RETRO 25/340":
+                        return 1.4;
+                    case "PANEL RETRO 25/554":
+                        return 2.2;
+                    case "PANEL RETRO 38/559":
+                        return 2.2;
+                    case "PANEL RETRO 38/315":
+                        return 1.4;
+                    default:
+                        return 2.2;
+                }
+            }
+
+            let trybPracy = document.getElementById('trybPracy').innerText;
+            if(trybPracy === 'auto'){
+                var retroWeight = waga_kg;
+            } else {
+                var retroWeight = getRetroWeight(retroOption);
+            }
+            for (var i = 0; i < tablicaDwuwymiarowa.length; i++) {
+                var ilosc = tablicaDwuwymiarowa[i][0];
+                while (ilosc > 0) {
+                    var wierszGrupy = [];
+                    var iloscDoDodania = Math.min(iloscDoPodzialu - pozycjeWGrupie, ilosc);
+                    wierszGrupy.push(iloscDoDodania + " x " + tablicaDwuwymiarowa[i][1]);
+                    ilosc -= iloscDoDodania;
+                    pozycjeWGrupie += iloscDoDodania;
+                    aktualnaGrupa.push([iloscDoDodania, tablicaDwuwymiarowa[i][1]]);
+                    if (pozycjeWGrupie >= iloscDoPodzialu) {
+                        grupy.push(aktualnaGrupa);
+                        aktualnaGrupa = [];
+                        pozycjeWGrupie = 0;
+                    }
+                }
+            }
+            if (aktualnaGrupa.length > 0) {
+                grupy.push(aktualnaGrupa);
+            }
+
+            var wynikiDiv = document.getElementById("wyniki");
+
+            for (var i = 0; i < grupy.length; i++) {
+                var maxWartosc = 0;
+                var totalSheets = 0;
+                var groupTexts = grupy[i].map(row => {
+                    var wartoscKolumny2 = parseFloat(row[1]);
+                    var iloscArkuszy = row[0];
+                    totalSheets += iloscArkuszy;
+                    if (wartoscKolumny2 > maxWartosc) {
+                        maxWartosc = wartoscKolumny2;
+                    }
+                    return `${row[0]} x ${row[1]}`;
+                }).join(", ");
+                let wagaPalety = grupy[i].reduce((sum, row) => sum + (row[0] * row[1] * retroWeight), 0).toFixed(2);
+                let wagaPaletyb = (grupy[i].reduce((sum, row) => sum + (row[0] * row[1] * 2.2), 0) + 20).toFixed(2);
+                let [paletaOpis, paletaDlugosc, caloscDlugosc, paletaWaga] = przypiszPaleteRetroDachowki(maxWartosc);
+                var newRow = document.createElement("div");
+                newRow.className = "grupa";
+                newRow.innerHTML = `Paleta nr ${i + 1}: ${groupTexts} | Łączna ilość arkuszy: ${totalSheets} | Maksymalna długość arkusza: ${maxWartosc} | <br>`;
+                newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: ${paletaOpis} | Waga brutto: ${Number(paletaWaga) + Number(wagaPalety)} kg | Waga netto: ${wagaPalety} kg | Dł-Szer-Wys: ${Math.round(((caloscDlugosc * 100) + Number.EPSILON) * 100) / 100}-125-${((totalSheets*3)+12)/2} | </span><br>Źródło: Retro | ID: ${LP_dok}`;
+                wynikiDiv.appendChild(newRow);
+            }
+        }
+
+        function executeDachowkiAction(text, waga_kg, LP_dok) {
+            let wynikiPoPierwszymPodziale = text.split("|");
+            let tablicaDwuwymiarowa = [];
+            for (let i = 0; i < wynikiPoPierwszymPodziale.length; i++) {
+                let wiersz = wynikiPoPierwszymPodziale[i].split("x");
+                tablicaDwuwymiarowa.push([parseInt(wiersz[0].trim()), parseFloat(wiersz[1].trim().replace(",", "."))]);
+            }
+            tablicaDwuwymiarowa.sort(function(a, b) {
+                return b[1] - a[1];
+            });
+
+            
+            const selectedRadio = document.querySelector('input[name="DACHÓWKIOptionSelect_radio"]:checked');
+            let wagakg = waga_kg
+            if(waga_kg){
+                wagakg = waga_kg;
+            }else{
+                wagakg = 4.72; 
+                if (selectedRadio.value === '0.7' || selectedRadio.value === '0.5') {
+                    wagakg = selectedRadio.value === '0.5' ? 4.72 : 6.1;
+                }
+            }
+
+            var grupy = [];
+            let obecna_grupa = [];
+            let suma_kg = 0;
+            let do_odj = 0;
+
+            for (let i = 0; i < tablicaDwuwymiarowa.length; i++) {
+                tablicaDwuwymiarowa[i][2] = tablicaDwuwymiarowa[i][0] * tablicaDwuwymiarowa[i][1] * wagakg;
+                suma_kg += tablicaDwuwymiarowa[i][2];
+                if (suma_kg > 1500.00) {
+                    let nadstan = suma_kg - 1500.00;
+                    do_odj = Math.floor(nadstan / (tablicaDwuwymiarowa[i][1] * wagakg)) + 1;
+                    tablicaDwuwymiarowa[i][0] = tablicaDwuwymiarowa[i][0] - do_odj;
+                    tablicaDwuwymiarowa[i][2] = tablicaDwuwymiarowa[i][0] * tablicaDwuwymiarowa[i][1] * wagakg;
+                    tablicaDwuwymiarowa.splice(i + 1, 0, [do_odj, tablicaDwuwymiarowa[i][1], do_odj * tablicaDwuwymiarowa[i][1] * wagakg]);
+                    obecna_grupa.push(tablicaDwuwymiarowa[i]);
+                    grupy.push(obecna_grupa);
+                    obecna_grupa = [];
+                    suma_kg = 0;
+                } else {
+                    obecna_grupa.push(tablicaDwuwymiarowa[i]);
+                }
+            }
+
+            if (obecna_grupa.length > 0) {
+                grupy.push(obecna_grupa);
+            }
+
+            var wynikiDiv = document.getElementById("wyniki");
+
+            for (let i = 0; i < grupy.length; i++) {
+                let maxWartosc = 0;
+                let totalSheets = 0;
+                let groupTexts = grupy[i].map(row => {
+                    let wartoscKolumny2 = parseFloat(row[1]);
+                    let iloscArkuszy = row[0];
+                    totalSheets += iloscArkuszy;
+                    if (wartoscKolumny2 > maxWartosc) {
+                        maxWartosc = wartoscKolumny2;
+                    }
+                    return `${row[0]} x ${row[1]}`;
+                }).join(", ");
+                let wagaPalety = (grupy[i].reduce((sum, row) => sum + row[2], 0)).toFixed(2);
+                let wagaPaletyb = (grupy[i].reduce((sum, row) => sum + row[2], 0) + 20).toFixed(2);
+                let [paletaOpis, paletaDlugosc, caloscDlugosc, paletaWaga] = przypiszPaleteRetroDachowki(maxWartosc);
+                let newRow = document.createElement("div");
+                newRow.className = "grupa";
+                newRow.innerHTML = `Paleta nr ${i + 1}: ${groupTexts} | Łączna ilość arkuszy: ${totalSheets} | Maksymalna długość arkusza: ${maxWartosc} | <br>`;
+                newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: ${paletaOpis} | Waga brutto: ${(Number(wagaPalety) + Number(paletaWaga)).toFixed(2)} kg | Waga netto: ${wagaPalety} kg | Dł-Szer-Wys: ${Math.round(((caloscDlugosc * 100) + Number.EPSILON) * 100) / 100}-125-${Math.round(((((totalSheets*0.7)+12)) + Number.EPSILON) * 100) / 100} | </span><br>Źródło: Dachówki | ID: ${LP_dok}`;
+                wynikiDiv.appendChild(newRow);
+            }
+        }
+
+
+
+        function executeTrapezyAction(text, waga_kg, LP_dok) {
+            let wynikiPoPierwszymPodziale = text.split("|");
+            let tablicaDwuwymiarowa = [];
+            for (let i = 0; i < wynikiPoPierwszymPodziale.length; i++) {
+                let wiersz = wynikiPoPierwszymPodziale[i].split("x");
+                tablicaDwuwymiarowa.push([parseInt(wiersz[0].trim()), parseFloat(wiersz[1].trim().replace(",", "."))]);
+            }
+            tablicaDwuwymiarowa.sort(function(a, b) {
+                return b[1] - a[1];
+            });
+
+            const selectedRadio = document.querySelector('input[name="TRAPEZOptionSelect_radio"]:checked');
+            let wagakg = waga_kg
+            if(waga_kg){
+                wagakg = waga_kg;
+            }else{
+                wagakg = 4.72; 
+                if (selectedRadio.value === '0.7' || selectedRadio.value === '0.5') {
+                    wagakg = selectedRadio.value === '0.5' ? 4.72 : 6.1;
+                }
+            }
+            var grupy = [];
+            let obecna_grupa = [];
+            let suma_kg = 0;
+            let do_odj = 0;
+
+            for (let i = 0; i < tablicaDwuwymiarowa.length; i++) {
+                tablicaDwuwymiarowa[i][2] = tablicaDwuwymiarowa[i][0] * tablicaDwuwymiarowa[i][1] * wagakg;
+                suma_kg += tablicaDwuwymiarowa[i][2];
+                if (suma_kg > 1500.00) {
+                    let nadstan = suma_kg - 1500.00;
+                    do_odj = Math.floor(nadstan / (tablicaDwuwymiarowa[i][1] * wagakg)) + 1;
+                    tablicaDwuwymiarowa[i][0] = tablicaDwuwymiarowa[i][0] - do_odj;
+                    tablicaDwuwymiarowa[i][2] = tablicaDwuwymiarowa[i][0] * tablicaDwuwymiarowa[i][1] * wagakg;
+                    tablicaDwuwymiarowa.splice(i + 1, 0, [do_odj, tablicaDwuwymiarowa[i][1], do_odj * tablicaDwuwymiarowa[i][1] * wagakg]);
+                    obecna_grupa.push(tablicaDwuwymiarowa[i]);
+                    grupy.push(obecna_grupa);
+                    obecna_grupa = [];
+                    suma_kg = 0;
+                } else {
+                    obecna_grupa.push(tablicaDwuwymiarowa[i]);
+                }
+            }
+
+            if (obecna_grupa.length > 0) {
+                grupy.push(obecna_grupa);
+            }
+
+            var wynikiDiv = document.getElementById("wyniki");
+
+            for (let i = 0; i < grupy.length; i++) {
+                let maxWartosc = 0;
+                let totalSheets = 0;
+                let groupTexts = grupy[i].map(row => {
+                    let wartoscKolumny2 = parseFloat(row[1]);
+                    let iloscArkuszy = row[0];
+                    totalSheets += iloscArkuszy;
+                    if (wartoscKolumny2 > maxWartosc) {
+                        maxWartosc = wartoscKolumny2;
+                    }
+                    return `${row[0]} x ${row[1]}`;
+                }).join(", ");
+                let wagaPalety = grupy[i].reduce((sum, row) => sum + row[2], 0).toFixed(2);
+                let wagaPaletyb = (grupy[i].reduce((sum, row) => sum + row[2], 0) + 20).toFixed(2);
+                let newRow = document.createElement("div");
+                newRow.className = "grupa";
+                newRow.innerHTML = `Paleta nr ${i + 1}: ${groupTexts} | Łączna ilość arkuszy: ${totalSheets} | Maksymalna długość arkusza: ${maxWartosc} | <br>`;
+                newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: BRAK | Waga brutto: ${wagaPalety} kg | Waga netto: ${wagaPalety} kg | Dł-Szer-Wys: ${Math.round(((maxWartosc * 100) + Number.EPSILON) * 100) / 100}-125-${Math.round(((((totalSheets*0.7)+12)) + Number.EPSILON) * 100) / 100} | </span><br>Źródło: Trapezy | ID: ${LP_dok}`;
+                wynikiDiv.appendChild(newRow);
+            }
+        }
+
+        function przypiszPaleteRetroDachowki(maxWymiar){
+
+            if(maxWymiar<=0.75){
+                paletaOpis="OP.PALETA 1.2M";
+                paletaDlugosc = 2;
+                paletaWaga = 14.1;
+            }else if(maxWymiar<=2.3){
+                paletaOpis="OP.PALETA 2M";
+                paletaDlugosc = 2;
+                paletaWaga = 26.0;
+            }else if(maxWymiar<=3.3){
+                paletaOpis="OP.PALETA 3M";
+                paletaDlugosc = 3;
+                paletaWaga = 36.5;
+            }else if(maxWymiar<=4.3){
+                paletaOpis="OP.PALETA 4M";
+                paletaDlugosc = 4;
+                paletaWaga = 44.1;
+            }else if(maxWymiar<=5.3){
+                paletaOpis="OP.PALETA 5M";
+                paletaDlugosc = 5;
+                paletaWaga = 58.0;
+            }else {
+                paletaOpis="OP.PALETA 6M";
+                paletaDlugosc = 6;
+                paletaWaga = 67.5;
+            }
+            caloscDlugosc = Math.max(maxWymiar, paletaDlugosc);
+
+            return [paletaOpis, paletaDlugosc, caloscDlugosc, paletaWaga]
+        }
+
+        function przypiszPaleteTerrano(maxWymiar){
+            if(maxWymiar<=2.9){
+                paletaOpis="OP.PALETA.PANEL.1";
+                paletaDlugosc = 1.38;
+                paletaWaga = 16.8;
+            }else if(maxWymiar<=4.9){
+                paletaOpis="OP.PALETA.PANEL.3";
+                paletaDlugosc = 3;
+                paletaWaga = 32.1;
+            }else {
+                paletaOpis="OP.PALETA.PANEL.5";
+                paletaDlugosc = 4.9;
+                paletaWaga = 47.8;
+            }
+            caloscDlugosc = Math.max(maxWymiar, paletaDlugosc);
+
+            return [paletaOpis, paletaDlugosc, caloscDlugosc, paletaWaga]
+        }
+
+        function executeArkuszeAction(text, waga_ark, LP_dok) {
+            if(waga_ark){
+                var waga_szt = Number(waga_ark);
+            }else{
+                var waga_szt = 9;
+            }
+            let wynikiPoPierwszymPodziale = text.split("|");
+            let tablicaDwuwymiarowa = [];
+            for (let i = 0; i < wynikiPoPierwszymPodziale.length; i++) {
+                let wiersz = wynikiPoPierwszymPodziale[i].split("x");
+                tablicaDwuwymiarowa.push([parseInt(wiersz[0].trim()), parseFloat(wiersz[1].trim().replace(",", "."))]);
+            }
+            tablicaDwuwymiarowa.sort(function(a, b) {
+                return b[1] - a[1];
+            });
+            let reszta = parseFloat(tablicaDwuwymiarowa[0][0]) % 100;
+            let wynik;
+            const wynikiDiv = document.getElementById("wyniki");
+
+            if (reszta > 0) {
+                wynik = Math.floor(parseFloat(tablicaDwuwymiarowa[0][0]) / 100) + 1;
+                for (let i = 1; i <= wynik; i++) {
+                    if (i != wynik) {
+                        var weight = Number(100.0)*Number(waga_szt);
+                        let newRow = document.createElement("div");
+                        newRow.className = "grupa";
+                        newRow.innerHTML = `Paleta nr ${i}: 100 x 2 | Łączna ilość arkuszy: 100 | Maksymalna długość arkusza: 2 | <br>`;
+                        newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: OP.PALETA.2M | Waga brutto: ${Number(weight+26)} kg | Waga netto: ${weight} kg | Dł-Szer-Wys: 200-125-20 | </span><br>Źródło: Arkusze | ID: ${LP_dok}`;
+                        wynikiDiv.appendChild(newRow);
+                    } else {
+                        var weight = (Number(reszta) * Number(waga_szt)) + 12;
+                        let newRow = document.createElement("div");
+                        newRow.className = "grupa";
+                        newRow.innerHTML = `Paleta nr ${i}: ${reszta} x 2 | Łączna ilość arkuszy: ${reszta} | Maksymalna długość arkusza: 2 | <br>`;
+                        newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: OP.PALETA.2M | Waga brutto: ${Number(weight+26)} kg | Waga netto: ${weight} kg | Dł-Szer-Wys: 200-125-${Math.round((((reszta*0.05)+12) + Number.EPSILON) * 100) / 100} | </span><br>Źródło: Arkusze | ID: ${LP_dok}`;
+                        wynikiDiv.appendChild(newRow);
+                    }
+                }
+            } else {
+                wynik = Math.floor(parseFloat(tablicaDwuwymiarowa[0][0]) / 100);
+                for (let i = 1; i <= wynik; i++) {
+                    var weight = Number(100.0)*Number(waga_szt);
+                    let newRow = document.createElement("div");
+                    newRow.className = "grupa";
+                    newRow.innerHTML = `Paleta nr ${i}: 100 x 2 | Łączna ilość arkuszy: 100 | Maksymalna długość arkusza: 2 | <br>`;
+                    newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: OP.PALETA.2M | Waga brutto: ${Number(weight+26)} kg | Waga netto: ${weight} kg | Dł-Szer-Wys: 200-125-20 | </span><br>Źródło: Arkusze | ID: ${LP_dok}`;
+                    wynikiDiv.appendChild(newRow);
+                }
+            }
+        }
+
+        function generateTable() {
+            let trybPracy = document.getElementById('trybPracy').innerText;
+            if(trybPracy === 'auto'){
+                kropka_zielona_czerwona2();
+            }
+            var wynikiDiv = document.getElementById("wyniki");
+            var generatedTableContainer = document.getElementById("generatedTableContainer");
+
+            var table = document.createElement("table");
+
+            var header = table.createTHead();
+            var headerRow = header.insertRow(0);
+
+            var headers = ["Rodzaj przestrzeni", "Nazwa przestrzeni", "Ladownosc przestrzeni", "Nazwa ladunku", "Dlugosc", "Szerokosc", "Wysokosc", "Ilosc ladunkow", "Waga ladunku", "Pietrowalnosc", "Ilosc pieter"];
+            headers.forEach(headerText => {
+                var cell = document.createElement("th");
+                cell.appendChild(document.createTextNode(headerText));
+                headerRow.appendChild(cell);
+            });
+
+            var tbody = table.createTBody();
+
+            var selectedContainer = document.querySelector('input[name="kontener"]:checked').value;
+
+            var initialRowValues = [];
+            if (selectedContainer === "20") {
+                initialRowValues = ["2", "Kontener Morski 20'", "21670", "", "589.8", "237", "238.5", "", "", "", ""];
+            } else if (selectedContainer === "40") {
+                initialRowValues = ["2", "Kontener Morski 40'", "26480", "", "1203.2", "237", "238.5", "", "", "", ""];
+            } else if (selectedContainer === "40HC") {
+                initialRowValues = ["2", "Kontener Morski 40' HC", "26280", "", "1203.2", "237", "269", "", "", "", ""];
+            } else if (selectedContainer === "Naczepa") {
+                initialRowValues = ["1", "Naczepa standard 33 EP", "24000", "", "1360", "245", "260", "", "", "", ""];
+            } else if (selectedContainer === "auto26") {
+                initialRowValues = ["1", "ZABO-26T", "12000", "", "770", "244", "260", "", "", "", ""];
+            }
+
+            
+            var initialRow = tbody.insertRow();
+            initialRowValues.forEach(value => {
+                var cell = initialRow.insertCell();
+                cell.appendChild(document.createTextNode(value));
+            });
+
+            var groups = wynikiDiv.getElementsByClassName("grupa");
+            for (var i = 0; i < groups.length; i++) {
+                var groupText = groups[i].innerText;
+                var sourceMatch = groupText.match(/Źródło: (\w+)/);
+                var lengthMatch = groupText.match(/Maksymalna długość arkusza: (\d+(\.\d+)?)/);
+                var lengthMatch_zwitek = groupText.match(/Długość zwitka: (\d+(\.\d+)?)/);
+                var totalSheetsMatch = groupText.match(/Łączna ilość arkuszy: (\d+)/);
+                var weightMatch = groupText.match(/Waga brutto: (\d+(\.\d+)?)/) || groupText.match(/waga: (\d+(\.\d+)?)/);
+                var dimMatch = groupText.match(/Dł-Szer-Wys: (\d+)-(\d+)-(\d+)/);
+                var techNameMatch = groupText.match(/Nazwa:\s*([\p{L}\s]+)/u);
+                var pietrowalnoscMatch = groupText.match(/Piętrowalność:\s*(Y|N)/);
+                var id_match = groupText.match(/ID: (\d+(\.\d+)?)/)
+
+
+                var source = sourceMatch ? sourceMatch[1] : "Unknown";
+                var maxLength = lengthMatch ? lengthMatch[1] : null;
+                var maxLength_zwitek = lengthMatch_zwitek ? lengthMatch_zwitek[1] : null;
+                var totalSheets = totalSheetsMatch ? totalSheetsMatch[1] : null;
+                var weight = weightMatch ? weightMatch[1] : null;
+
+
+                var row = tbody.insertRow();
+                var values;
+
+                switch (source) {
+                    case 'Terrano':
+                        values = [
+                            "", "", "", source,
+                            maxLength ? Math.round(((maxLength * 100) + Number.EPSILON) * 100) / 100 : "Placeholder",
+                            60, 69, 1,
+                            weight ? Math.round((weight) * 100) / 100 : "Placeholder", "Y", 3
+                        ];
+                        break;
+                    case 'Dach':
+                        values = [
+                            "", "", "", "Dachowka",
+                            dimMatch[1] ? Math.round(((dimMatch[1]*1) + Number.EPSILON) * 100) / 100 : "Placeholder",
+                            120,
+                            totalSheets ? Math.round((((totalSheets * 0.7) + 12) + Number.EPSILON) * 100) / 100 : "Placeholder",
+                            1,
+                            weight ? Math.round((weight) * 100) / 100 : "Placeholder", "Y", ""
+                        ];
+                        break;
+                    case 'Arkusze':
+                        values = [
+                            "", "", "", source,
+                            200, 125, 20, 1, 100, "Y", ""
+                        ];
+                        break;
+                    case 'Trapezy':
+                        values = [
+                            "", "", "", source,
+                            maxLength ? Math.round(((maxLength * 100) + Number.EPSILON) * 100) / 100 : "Placeholder",
+                            120,
+                            totalSheets ? Math.round(((totalSheets * 0.7) + Number.EPSILON) * 100) / 100 : "Placeholder",
+                            1,
+                            weight ? Math.round((weight) * 100) / 100 : "Placeholder", "Y", ""
+                        ];
+                        break;
+                    case 'P':
+                        if(maxLength <=3){
+                            values = [
+                                "", "", "", "Plaska na wymiar",
+                                dimMatch[1],
+                                120,
+                                dimMatch[3],
+                                1,
+                                weight ? Math.round((weight) * 100) / 100 : 0, "Y", ""
+                            ]
+                        }
+                        else if (maxLength <= 30) {
+                            values = [
+                                "", "", "", "Plaska na wymiar",
+                                120,
+                                80,
+                                139.5,
+                                1,
+                                weight ? Math.round((weight) * 100) / 100 : 0, "N", ""
+                            ]
+                        } else if (maxLength <= 300) {
+                            values = [
+                                "", "", "", "Plaska na wymiar 40 - 300mb",
+                                124.5,
+                                74,
+                                80,
+                                1,
+                                weight ? Math.round((weight) * 100) / 100 : 0, "N", ""
+                            ]
+                        } else {
+                            values = [
+                                "", "", "", "Plaska na wymiar 300mb+",
+                                126,
+                                110.5,
+                                98,
+                                1,
+                                weight ? Math.round((weight) * 100) / 100 : 0, "N", ""
+                            ]
+                        }
+
+                        break;
+                    case 'Retro':
+                        values = [
+                            "", "", "", "Retro",
+                            maxLength ? Math.round(((maxLength * 100) + Number.EPSILON) * 100) / 100 : "Placeholder",
+                            120,
+                            totalSheets ? Math.round((((totalSheets * 0.3) + 12) + Number.EPSILON) * 100) / 100 : "Placeholder",
+                            1,
+                            weight ? Math.round((weight) * 100) / 100 : 0, "N", ""
+                        ];
+                        break;
+                    case 'Paleta':
+                        values = [
+                            "", "", "", techNameMatch[1],
+                            dimMatch[1],
+                            dimMatch[2],
+                            dimMatch[3],
+                            1,
+                            weight ? Math.round((weight) * 100) / 100 : 0, pietrowalnoscMatch[1], ""
+                        ];
+                        break;
+                    default:
+                        values = [
+                            "Placeholder", "Placeholder", "Placeholder",
+                            "Placeholder", "Placeholder", "Placeholder",
+                            "Placeholder", "Placeholder", "Placeholder",
+                            "Placeholder", "Placeholder"
+                        ];
+                        break;
+                }
+
+                values.forEach(value => {
+                    var cell = row.insertCell();
+                    cell.appendChild(document.createTextNode(value));
+                });
+            }
+
+            generatedTableContainer.innerHTML = "";
+            generatedTableContainer.appendChild(table);
+
+            var podsumowanieDiv = document.getElementById('podsumowanie');
+            var rows = table.getElementsByTagName('tr');
+            var palletCount = rows.length - 1;
+            //podsumowanieDiv.innerHTML += `<br><div class='podsumowanie'>Łączna ilość palet: ${palletCount}</div>`;
+        }
+
+
+
+        function wybSzerRetro(profil, wymiary) {
+            console.log(profil, wymiary)
+            var ilosc = 0;
+            var tekst = document.getElementById("rowTextInput") ? document.getElementById("rowTextInput").value : "";
+            if(!tekst){
+                tekst = wymiary
+            }
+            var wynikiPoPierwszymPodziale = tekst.split("|");
+            var tablicaDwuwymiarowa = [];
+            for (var i = 0; i < wynikiPoPierwszymPodziale.length; i++) {
+                var wiersz = wynikiPoPierwszymPodziale[i].split("x");
+                tablicaDwuwymiarowa.push(wiersz);
+            }
+            tablicaDwuwymiarowa.sort(function(a, b) {
+                return parseFloat(b[1].replace(",", ".")) - parseFloat(a[1].replace(",", "."));
+            });
+            console.log(tablicaDwuwymiarowa[0][1].replace(",", "."));
+            if (Math.max(parseFloat(tablicaDwuwymiarowa[0][1].replace(",", "."))) < 7.5) {
+                switch (profil) {
+                    case "PANEL RETRO 25/239":
+                        ilosc = 160;
+                        break;
+
+                    case "PANEL RETRO 25/340":
+                        ilosc = 132;
+                        break;
+
+                    case "PANEL RETRO 25/554":
+                        ilosc = 88;
+                        break;
+
+                    case "PANEL RETRO 38/315":
+                        ilosc = 102;
+                        break;
+
+                    case "PANEL RETRO 38/559":
+                        ilosc = 68;
+                        break;
+
+                    default:
+                        ilosc = 88;
+                }
+            } else {
+                switch (profil) {
+                    case "PANEL RETRO 25/239":
+                        ilosc = 148;
+                        break;
+
+                    case "PANEL RETRO 25/340":
+                        ilosc = 112;
+                        break;
+
+                    case "PANEL RETRO 25/554":
+                        ilosc = 74;
+                        break;
+
+                    case "PANEL RETRO 38/315":
+                        ilosc = 78;
+                        break;
+
+                    case "PANEL RETRO 38/559":
+                        ilosc = 52;
+                        break;
+
+                    default:
+                        ilosc = 88;
+                }
+            }
+            return ilosc;
+        }
+
+        function toggleTable() {
+            var tableContainer = document.getElementById("generatedTableContainer");
+            tableContainer.classList.toggle("hidden");
+        }
+
+        function handleFile() {
+            const fileUpload = document.getElementById("fileUpload").files[0];
+            if (fileUpload) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const excelData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+
+                    const headers = excelData[0];
+                    const requiredHeaders = [
+                        'Zamowienie_Numer', 'Surowiec_Grubosc', 'Profil', 'Surowiec_Kod', 'Profil_Nazwa', 
+                        'Podzial_Sposob', 'Retro_Opcja', 'ilosc x dlugosc', 'Waga', 'Metry', 'waga_jednostka', 'Twr_Jm', 'waga_MB', 'LP_dok'
+                    ];
+
+                    if (JSON.stringify(headers) !== JSON.stringify(requiredHeaders)) {
+                        alert('Zły plik!!!');
+                        return;
+                    }
+
+                    jsonData = excelData.slice(1).map(row => {
+                        let rowData = {};
+                        requiredHeaders.forEach((header, index) => {
+                            rowData[header] = row[index];
+                        });
+                        return rowData;
+                    });
+
+                    var i=0;
+                    jsonData.forEach(row => {
+                        const ZS = row['Zamowienie_Numer'];
+                        const ilosc_x_dlugosc = row['ilosc x dlugosc'];
+                        const sposob_podzialu = row['Podzial_Sposob'];
+                        const profil_nazwa = row['Profil_Nazwa'];
+                        const grubosc = (row['Surowiec_Grubosc'])/100;
+                        const jednostka_waga = (row['waga_jednostka']);
+                        const sum_jednostek = (row['Metry']);
+                        const sum_waga = (row['Waga']);
+                        const jm = (row['Twr_Jm']);
+                        const LP_dok = row['LP_dok'];
+                        addRowAuto(ZS, sposob_podzialu, ilosc_x_dlugosc, profil_nazwa, grubosc, jednostka_waga, sum_jednostek, sum_waga, jm, jsonData, i, LP_dok);
+                        i++;
+                });
+            }
+                reader.readAsArrayBuffer(fileUpload);
+            }
+        }
+
+
+
+        function displayExcelData(data) {
+            data.forEach(row => {
+                const [position, text, retroOption] = row;
+
+                if (position && text) {
+                    if (position === 'RETRO' && retroOption) {
+                        executeRetroAction(text, retroOption);
+                    } else {
+                        executeRowAction(position, text, null);
+                    }
+                }
+            });
+        }
+
+
+        function exportPackingListToExcel() {
+            let trybPracy = document.getElementById('trybPracy').innerText;
+            if(trybPracy === 'auto'){
+                var selectedPLtyp = document.querySelector('input[name="typPL"]:checked').value;
+            }
+            const rows = document.querySelectorAll('#wyniki .grupa');
+            const wb = XLSX.utils.book_new();
+            const ws_data = [];
+
+            const headers = [
+                "LP", "Wymiary", "Łączna ilość arkuszy", 
+                "Maksymalna długość arkusza", "Rodzaj palety", 
+                "Waga brutto", "Waga netto", "Długość-Szerokość-Wysokość [cm]", 
+                "Źródło", "ID (ZS - Grupa - LP)"
+            ]; 
+
+            ws_data.push(headers);
+
+            rows.forEach((row, index) => {
+                const rowText = row.innerText;
+
+                const sourceMatch = rowText.match(/Źródło:\s*([^\n|]+)/);
+                const paletaType = sourceMatch ? sourceMatch[1].trim() : "";
+
+                const id_match = rowText.match(/ID:\s*([^\n]+)/);
+
+                const id_ = id_match ? id_match[1].trim() : "";
+
+
+                let wymiary = "Placeholder", iloscArkuszy, dlugoscArkusza, rodzajPalety, wagaBrutto, wagaNetto, wymiaryPalety;
+
+                const rodzajPaletyMatch = rowText.match(/Paleta:\s*([^\n|]+)/);
+                rodzajPalety = rodzajPaletyMatch ? rodzajPaletyMatch[1].trim() : "";
+
+                iloscArkuszy = rowText.match(/Łączna ilość arkuszy:\s*(\d+)/) ? rowText.match(/Łączna ilość arkuszy:\s*(\d+)/)[1] : "Placeholder";
+
+                const lengthMatches = rowText.match(/(\d+(\.\d+)?) x (\d+(\.\d+)?)/g);
+                if (lengthMatches) {
+                    const lengths = Array.from(new Set(lengthMatches.map(match => match.split('x')[1].trim())));
+                    wymiary = lengths.join(", ");
+                }
+
+                dlugoscArkusza = rowText.match(/Maksymalna długość arkusza:\s*(\d+(\.\d+)?)/) ? rowText.match(/Maksymalna długość arkusza:\s*(\d+(\.\d+)?)/)[1] : "Placeholder";
+
+                wagaBrutto = rowText.match(/Waga brutto:\s*(\d+(\.\d+)?)/) ? rowText.match(/Waga brutto:\s*(\d+(\.\d+)?)/)[1] : "";
+                wagaNetto = rowText.match(/Waga netto:\s*(\d+(\.\d+)?)/) ? rowText.match(/Waga netto:\s*(\d+(\.\d+)?)/)[1] : "";
+
+                wymiaryPalety = rowText.match(/Dł-Szer-Wys:\s*(\d+)-(\d+)-(\d+)/) ? `${rowText.match(/Dł-Szer-Wys:\s*(\d+)-(\d+)-(\d+)/)[1]}-${rowText.match(/Dł-Szer-Wys:\s*(\d+)-(\d+)-(\d+)/)[2]}-${rowText.match(/Dł-Szer-Wys:\s*(\d+)-(\d+)-(\d+)/)[3]}` : "";
+
+                if (paletaType === "Paleta techniczna") {
+                    rodzajPalety = "Paleta techniczna";
+                    wymiary = "nie dotyczy";
+                    iloscArkuszy = "nie dotyczy";
+                    dlugoscArkusza = "nie dotyczy";
+                }
+
+                ws_data.push([
+                    `${index + 1}`, 
+                    wymiary,                
+                    iloscArkuszy,           
+                    dlugoscArkusza,         
+                    rodzajPalety,           
+                    wagaBrutto,             
+                    wagaNetto,              
+                    wymiaryPalety,          
+                    paletaType,
+                    selectedPLtyp === "2" ? id_ : id_.split("-")[0]    
+                ]);
+            });
+
+            const ws = XLSX.utils.aoa_to_sheet(ws_data);
+            XLSX.utils.book_append_sheet(wb, ws, "Packing List");
+            XLSX.writeFile(wb, "packing_list.xlsx");
+        }
+    </script>
+</body>
+</html>

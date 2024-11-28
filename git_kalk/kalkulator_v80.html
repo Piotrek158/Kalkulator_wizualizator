@@ -267,6 +267,12 @@
         <button id="auto_btn" onclick="menu(this.id)"><p>Auto</p></button>
         <button id="manual_btn" onclick="menu(this.id)"><p>Manual</p></button>
         <button id="lista_palet_btn" data-translate="menu.palletList" onclick="menu(this.id)"></button>
+        <select id="languageSelector" onchange="changeLanguage(this.value)">
+            <option value="en">English</option>
+            <option value="pl">Polski</option>
+            <option value="de">Deutsch</option>
+        </select>
+        
     </div>
     <div class='content'>
         <div id="menuContent"></div>
@@ -328,11 +334,16 @@
 
 
     <script>
+        function changeLanguage(language) {
+            loadTranslations(language);
+        }
+
+
         let translations = {};
-        let currentLanguage = 'en';
+        let currentLanguage = 'pl';
 
         async function loadTranslations(language) {
-            const baseURL = "";
+            const baseURL = "https://raw.githubusercontent.com/Piotrek158/Kalkulator_wizualizator/main/git_kalk/tlumaczenia/";
             const url = `${baseURL}${language}.json`;
 
             try {

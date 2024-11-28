@@ -1,0 +1,23 @@
+{
+    "menu": {
+      "auto": "Automatisch",
+      "manual": "Manuell",
+      "palletList": "Palettenliste"
+    },
+    "popup": {
+      "title": "Geben Sie technische Paletteninformationen ein",
+      "fields": {
+        "palletCount": "Anzahl der Paletten",
+        "length": "Länge",
+        "width": "Breite",
+        "height": "Höhe",
+        "netWeight": "Nettogewicht",
+        "grossWeight": "Bruttogewicht"
+      },
+      "buttons": {
+        "add": "Hinzufügen",
+        "cancel": "Abbrechen"
+      }
+    }
+  }
+  

@@ -12,6 +12,8 @@
     "height": "Height",
     "netWeight": "Net Weight",
     "grossWeight": "Gross Weight",
+    "name": "Name",
+    "stacking": "Stacking",
     "add": "Add",
     "cancel": "Cancel"
   },

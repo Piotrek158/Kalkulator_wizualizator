@@ -6,18 +6,14 @@
   },
   "popup": {
     "title": "Geben Sie die technischen Palettendetails ein",
-    "fields": {
-      "palletCount": "Anzahl der Paletten",
-      "length": "Länge",
-      "width": "Breite",
-      "height": "Höhe",
-      "netWeight": "Nettogewicht",
-      "grossWeight": "Bruttogewicht"
-    },
-    "buttons": {
-      "add": "Hinzufügen",
-      "cancel": "Abbrechen"
-    }
+    "palletCount": "Anzahl der Paletten",
+    "length": "Länge",
+    "width": "Breite",
+    "height": "Höhe",
+    "netWeight": "Nettogewicht",
+    "grossWeight": "Bruttogewicht",
+    "add": "Hinzufügen",
+    "cancel": "Abbrechen"
   },
   "buttons": {
       "add": "Hinzufügen",
@@ -30,7 +26,7 @@
       "showHideDetails": "Details anzeigen/verbergen",
       "genSolution": "Lösung generieren",
       "genExport": "Export generieren",
-      "genTable": "Table generieren",
+      "genTable": "Tabelle generieren",
       "exportGoodLoading": "Export zu GoodLoading",
       "exportPackingList": "Packliste exportieren"
     }

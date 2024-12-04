@@ -6,18 +6,14 @@
     },
     "popup": {
       "title": "Podaj Detale Palety Technicznej",
-      "fields": {
-        "palletCount": "Ilość Palet",
-        "length": "Długość",
-        "width": "Szerokość",
-        "height": "Wysokość",
-        "netWeight": "Waga Netto",
-        "grossWeight": "Waga Brutto"
-      },
-      "buttons": {
-        "add": "Dodaj",
-        "cancel": "Anuluj"
-      }
+      "palletCount": "Ilość Palet",
+      "length": "Długość",
+      "width": "Szerokość",
+      "height": "Wysokość",
+      "netWeight": "Waga Netto",
+      "grossWeight": "Waga Brutto",
+      "add": "Dodaj",
+      "cancel": "Anuluj"
     },
     "buttons": {
         "add": "Dodaj",

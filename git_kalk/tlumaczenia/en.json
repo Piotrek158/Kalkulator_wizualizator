@@ -5,19 +5,15 @@
     "palletList": "Pallet List"
   },
   "popup": {
-    "title": "Enter Technical Pallet Details",
-    "fields": {
-      "palletCount": "Number of Pallets",
-      "length": "Length",
-      "width": "Width",
-      "height": "Height",
-      "netWeight": "Net Weight",
-      "grossWeight": "Gross Weight"
-    },
-    "buttons": {
-      "add": "Add",
-      "cancel": "Cancel"
-    }
+    "title": "Provide Technical Pallet Details",
+    "palletCount": "Number of Pallets",
+    "length": "Length",
+    "width": "Width",
+    "height": "Height",
+    "netWeight": "Net Weight",
+    "grossWeight": "Gross Weight",
+    "add": "Add",
+    "cancel": "Cancel"
   },
   "buttons": {
       "add": "Add",
@@ -27,7 +23,7 @@
       "addTech": "Add Technical Pallet",
       "clearCalc": "Clear Calculations",
       "startAgain": "Start Again",
-      "showHideDetails": "Show-Hide Details",
+      "showHideDetails": "Show/Hide Details",
       "genSolution": "Generate Solution",
       "genExport": "Generate Export",
       "genTable": "Generate Table",

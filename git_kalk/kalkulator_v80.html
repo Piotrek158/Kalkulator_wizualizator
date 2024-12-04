@@ -444,6 +444,7 @@ let jsonData = [];
         function menu(id) {
             let menuContent = document.getElementById("menuContent");
             menuContent.innerHTML = "";
+            loadTranslations(currentLanguage);
             switch(id) {
                 case 'auto_btn':
                     menuContent.innerHTML = `
@@ -503,6 +504,7 @@ let jsonData = [];
                                     <button data-translate="buttons.exportPackingList" onclick="exportPackingListToExcel()"></button><br><br>
                         </div>
                     `;
+                    translatePage();
                     break;
                 case 'manual_btn':
                     menuContent.innerHTML = `
@@ -564,7 +566,9 @@ let jsonData = [];
                             <button onclick="exportTableToExcel()">Eksportuj do GoodLoading</button><br><br>
                             <button onclick="exportPackingListToExcel()">Eksportuj packing list</button><br><br>
                     `;
+                    translatePage();
                     break;
+                    
                 case 'lista_palet_btn':
                     menuContent.innerHTML = `
                         <table>
@@ -666,6 +670,7 @@ let jsonData = [];
                         </table>
 
                     `;
+                    translatePage();
                     break;
                 default:
                     menuContent.innerHTML = "<h2>Wybierz opcję</h2>";

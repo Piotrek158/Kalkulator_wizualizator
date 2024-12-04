@@ -1,23 +1,36 @@
 {
-    "menu": {
-      "auto": "Automatisch",
-      "manual": "Manuell",
-      "palletList": "Palettenliste"
+  "menu": {
+    "auto": "Auto",
+    "manual": "Manuell",
+    "palletList": "Palettenliste"
+  },
+  "popup": {
+    "title": "Geben Sie die technischen Palettendetails ein",
+    "fields": {
+      "palletCount": "Anzahl der Paletten",
+      "length": "Länge",
+      "width": "Breite",
+      "height": "Höhe",
+      "netWeight": "Nettogewicht",
+      "grossWeight": "Bruttogewicht"
     },
-    "popup": {
-      "title": "Geben Sie technische Paletteninformationen ein",
-      "fields": {
-        "palletCount": "Anzahl der Paletten",
-        "length": "Länge",
-        "width": "Breite",
-        "height": "Höhe",
-        "netWeight": "Nettogewicht",
-        "grossWeight": "Bruttogewicht"
-      },
-      "buttons": {
-        "add": "Hinzufügen",
-        "cancel": "Abbrechen"
-      }
+    "buttons": {
+      "add": "Hinzufügen",
+      "cancel": "Abbrechen"
     }
-  }
-  
+  },
+  "buttons": {
+      "add": "Hinzufügen",
+      "cancel": "Abbrechen",
+      "load": "Excel-Datei laden",
+      "group": "Gruppieren",
+      "addTech": "Technische Palette hinzufügen",
+      "clearCalc": "Berechnungen löschen",
+      "startAgain": "Neu beginnen",
+      "showHideDetails": "Details anzeigen/verbergen",
+      "genSolution": "Lösung generieren",
+      "genExport": "Export generieren",
+      "exportGoodLoading": "Export zu GoodLoading",
+      "exportPackingList": "Packliste exportieren"
+    }
+}

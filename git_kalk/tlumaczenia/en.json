@@ -16,17 +16,7 @@
     },
     "buttons": {
       "add": "Add",
-      "cancel": "Cancel",
-      "load": "Load Excel File",
-      "group": "Group",
-      "addTech": "Add Technical Pallet",
-      "clearCalc": "Clear Calculations",
-      "startAgain": "Start Again",
-      "showHideDetails": "Show-Hide Details",
-      "genSolution": "Generate Solution",
-      "genExport": "Generate Export",
-      "exportGoodLoading": "Export to GoodLoading",
-      "exportPackingList": "Export Packing List"
+      "cancel": "Cancel"
     }
   },
   "buttons": {

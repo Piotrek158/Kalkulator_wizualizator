@@ -1,0 +1,55 @@
+{
+    "menu": {
+      "auto": "Automatický",
+      "manual": "Manuálny",
+      "palletList": "Zoznam Paliet"
+    },
+    "popup": {
+      "title": "Zadajte Technické Údaje Palety",
+      "palletCount": "Počet Paliet",
+      "length": "Dĺžka",
+      "width": "Šírka",
+      "height": "Výška",
+      "netWeight": "Čistá Hmotnosť",
+      "grossWeight": "Hrubá Hmotnosť",
+      "name": "Názov",
+      "stacking": "Stohovateľnosť",
+      "add": "Pridať",
+      "cancel": "Zrušiť"
+    },
+    "buttons": {
+        "add": "Pridať",
+        "cancel": "Zrušiť",
+        "load": "Nahrať Excel Súbor",
+        "group": "Zoskupiť",
+        "addTech": "Pridať Technickú Paletu",
+        "clearCalc": "Vymazať Výpočty",
+        "startAgain": "Začať Odznova",
+        "showHideDetails": "Zobraziť/Skryť Detaily",
+        "genSolution": "Generovať Riešenie",
+        "genExport": "Generovať Export",
+        "genTable": "Generovať Tabuľku",
+        "exportGoodLoading": "Exportovať do GoodLoading",
+        "exportPackingList": "Exportovať Zoznam Balenia",
+        "usun": "Vymazať",
+        "addToGrouping": "Vybrať na Zoskupenie"
+      },
+      "labele":{
+        "20Container": "20\" Kontajner",
+        "40Container": "40\" Kontajner",
+        "40HCContainer": "40\" HC Kontajner",
+        "semiTrailer": "Náves",
+        "Auto26T": "Auto 26T"
+      },
+      "packingList":{
+        "standardPL": "Štandardný Zoznam Balenia",
+        "rozszerzonyPL": "Rozšírený Zoznam Balenia (experimentálny - môže obsahovať chyby)"
+      },
+      "listaPalet":{
+        "indeksPalety": "Index Palety",
+        "dlugosc": "Dĺžka",
+        "szerokosc": "Šírka",
+        "wysokosc": "Výška",
+        "waga": "Hmotnosť"
+      }
+}

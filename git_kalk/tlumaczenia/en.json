@@ -5,7 +5,7 @@
     "palletList": "Pallet List"
   },
   "popup": {
-    "title": "Provide Technical Pallet Details",
+    "title": "Enter Technical Pallet Details",
     "palletCount": "Number of Pallets",
     "length": "Length",
     "width": "Width",
@@ -13,7 +13,7 @@
     "netWeight": "Net Weight",
     "grossWeight": "Gross Weight",
     "name": "Name",
-    "stacking": "Stacking",
+    "stacking": "Stackability",
     "add": "Add",
     "cancel": "Cancel"
   },
@@ -25,11 +25,31 @@
       "addTech": "Add Technical Pallet",
       "clearCalc": "Clear Calculations",
       "startAgain": "Start Again",
-      "showHideDetails": "Show/Hide Details",
+      "showHideDetails": "Show-Hide Details",
       "genSolution": "Generate Solution",
       "genExport": "Generate Export",
       "genTable": "Generate Table",
       "exportGoodLoading": "Export to GoodLoading",
-      "exportPackingList": "Export Packing List"
+      "exportPackingList": "Export Packing List",
+      "usun": "Delete",
+      "addToGrouping": "Select for Grouping"
+    },
+    "labele":{
+      "20Container": "20\" Container",
+      "40Container": "40\" Container",
+      "40HCContainer": "40\" HC Container",
+      "semiTrailer": "Semi-trailer",
+      "Auto26T": "Truck 26T"
+    },
+    "packingList":{
+      "standardPL": "Standard Packing List",
+      "rozszerzonyPL": "Extended Packing List (experimental - may contain errors)"
+    },
+    "listaPalet":{
+      "indeksPalety": "Pallet Index",
+      "dlugosc": "Length",
+      "szerokosc": "Width",
+      "wysokosc": "Height",
+      "waga": "Weight"
     }
 }

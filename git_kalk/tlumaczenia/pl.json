@@ -30,7 +30,27 @@
         "genExport": "Generuj export",
         "genTable": "Generuj tabelkę",
         "exportGoodLoading": "Eksportuj do GoodLoading",
-        "exportPackingList": "Eksportuj packing list"
+        "exportPackingList": "Eksportuj packing list",
+        "usun": "usun",
+        "addToGrouping": "Wybierz do grupowania"
+      },
+      "labele":{
+        "20Container": "Kontener 20\"",
+        "40Container": "Kontener 40\"",
+        "40HCContainer": "Kontener 40\" HC",
+        "semiTrailer": "Naczepa",
+        "Auto26T": "Auto 26T"
+      },
+      "packingList":{
+        "standardPL": "Standardowy packing list",
+        "rozszerzonyPL": "Rozbudowant Packing List (eksperymentalny - może zawierać błędy)"
+      },
+      "listaPalet":{
+        "indeksPalety": "Indeks palety",
+        "dlugosc": "Długość",
+        "szerokosc": "Szerokość",
+        "wysokosc": "Wysokość",
+        "waga": "Waga"
       }
 }
   

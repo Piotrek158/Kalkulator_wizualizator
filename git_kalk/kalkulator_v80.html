@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator palet v 0.8.0</title>
+    <title>Kalkulator palet v 1.0.0</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
     <style>
         * {
@@ -289,7 +289,7 @@
     <div id="popupOverlay"></div>
 
     <div id="popupForm">
-        <h2>Podaj detale palety tech.</h2>
+        <h2 data-translate="popup.title"></h2>
         <form id="palletForm">
             <select id="palletDropdown" onchange="autofillDimensions(this.value)">
                 <option value="">Wybierz ze spisu</option>
@@ -325,10 +325,10 @@
             <label data-translate="popup.grossWeight" for="grossWeight">Waga brutto:</label>
             <input type="number" id="grossWeight" name="grossWeight" placeholder="" required>
     
-            <label data-translate="popup.netWeight" for="nazwaGL">Nazwa:</label>
+            <label data-translate="popup.name" for="nazwaGL">Nazwa:</label>
             <input type="text" id="nazwaGL" name="nazwaGL" required>
     
-            <label data-translate="popup.netWeight" for="pietrowalnosc">Piętrowalność:</label>
+            <label data-translate="popup.stacking" for="pietrowalnosc">Piętrowalność:</label>
             <input type="checkbox" id="pietrowalnosc" name="pietrowalnosc" value="Tak">
             <label for="pietrowalnosc"></label><br>
 
@@ -1040,7 +1040,7 @@ let jsonData = [];
         for (let i = 1; i <= kolekcja.length; i++) {
             let newRow = document.createElement("div");
             newRow.className = "grupa";
-            newRow.innerHTML = `Paleta nr ${i}: ${kolekcja[i - 1]} x ${wymiar_dl} | Łączna ilość arkuszy: ${kolekcja[i - 1]} | Maksymalna długość arkusza: ${Math.max(wymiar_dl)} | <br>`;
+            newRow.innerHTML = `Paleta nr ${i}: ${kolekcja[i - 1]} x ${wymiar_dl} | Łączna ilość arkuszy: ${kolekcja[i - 1]} | Maksymalna długość arkusza: ${Math.max(wymiar_dl)} | Piętrowalność: Y |<br>`;
             newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: ${paletaOpis} | Waga brutto: ${Math.round(((((wymiar_dl * waga_kg))*kolekcja[i - 1]) * 100) / 100)+Number(plaetaWaga)} kg | Waga netto: ${Math.round(((((wymiar_dl * waga_kg))*kolekcja[i - 1]) * 100) / 100)} kg | Dł-Szer-Wys: ${paletaDlugosc*100}-120-${12+((kolekcja[i - 1])*0.06)} | </span><br>Źródło: Płaska na wymiar | ID: ${LP_dok}`;
             wynikiDiv.appendChild(newRow);
         }
@@ -1057,7 +1057,7 @@ let jsonData = [];
         for (let i = 1; i <= kolekcja.length; i++) {
             let newRow = document.createElement("div");
             newRow.className = "grupa";
-            newRow.innerHTML = `Paleta nr ${i}: ${kolekcja[i-1]} x ${wymiar_dl} | Łączna ilość arkuszy: ${kolekcja[i - 1]} | Maksymalna długość arkusza: ${Math.max(wymiar_dl)} | <br>`;
+            newRow.innerHTML = `Paleta nr ${i}: ${kolekcja[i-1]} x ${wymiar_dl} | Łączna ilość arkuszy: ${kolekcja[i - 1]} | Maksymalna długość arkusza: ${Math.max(wymiar_dl)} | Piętrowalność: Y | <br>`;
             newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: OP.PALETA.2M | Waga brutto: ${Math.round(((((wymiar_dl * waga_kg) + 15)*kolekcja[i - 1]) * 100) / 100)+26} kg | Waga netto: ${Math.round(((((wymiar_dl * waga_kg) + 15)*kolekcja[i - 1]) * 100) / 100)} kg | Dł-Szer-Wys: 120-80-139.5 | </span><br>Źródło: Płaska na wymiar | ID: ${LP_dok}`;
             wynikiDiv.appendChild(newRow);
         }
@@ -1073,7 +1073,7 @@ let jsonData = [];
         for (let i = 1; i <= kolekcja.length; i++) {
             let newRow = document.createElement("div");
             newRow.className = "grupa";
-            newRow.innerHTML = `Paleta nr ${i}: ${kolekcja[i-1]} x ${wymiar_dl} | Łączna ilość arkuszy: ${kolekcja[i - 1]} | Maksymalna długość arkusza: ${Math.max(wymiar_dl)} | <br>`;
+            newRow.innerHTML = `Paleta nr ${i}: ${kolekcja[i-1]} x ${wymiar_dl} | Łączna ilość arkuszy: ${kolekcja[i - 1]} | Maksymalna długość arkusza: ${Math.max(wymiar_dl)} | Piętrowalność: Y | <br>`;
             newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: OP.PALETA.2M | Waga brutto: ${Math.round(((((wymiar_dl * waga_kg) + 15)*kolekcja[i - 1]) * 100) / 100)+26} kg | Waga netto: ${Math.round(((((wymiar_dl * waga_kg) + 15)*kolekcja[i - 1]) * 100) / 100)} kg | Dł-Szer-Wys: 120-80-139.5 | </span><br>Źródło: Płaska na wymiar | ID: ${LP_dok}`;
             wynikiDiv.appendChild(newRow);
         }
@@ -1081,7 +1081,7 @@ let jsonData = [];
         for (let i = 0; i < tablicaDwuwymiarowa[0][0]; i++) {
             let newRow = document.createElement("div");
             newRow.className = "grupa";
-            newRow.innerHTML = `Paleta nr ${i+1}: 1 x ${tablicaDwuwymiarowa[0][1]} | Łączna ilość arkuszy: 1 | Maksymalna długość arkusza: ${Math.max(wymiar_dl)} | <br>`;
+            newRow.innerHTML = `Paleta nr ${i+1}: 1 x ${tablicaDwuwymiarowa[0][1]} | Łączna ilość arkuszy: 1 | Maksymalna długość arkusza: ${Math.max(wymiar_dl)} | Piętrowalność: N | <br>`;
             newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: stelaż mały | Waga brutto: ${Math.round(((((wymiar_dl * waga_kg) + 15)*tablicaDwuwymiarowa[0][1]) * 100) / 100)+20} kg | Waga netto: ${Math.round((((wymiar_dl * waga_kg) + 15)*tablicaDwuwymiarowa[0][1]) * 100) / 100} | Dł-Szer-Wys: 124.5-74-80 | </span><br>Źródło: Płaska na wymiar | ID: ${LP_dok}`;
             wynikiDiv.appendChild(newRow);
         }
@@ -1089,7 +1089,7 @@ let jsonData = [];
         for (let i = 0; i < tablicaDwuwymiarowa[0][0]; i++) {
             let newRow = document.createElement("div");
             newRow.className = "grupa";
-            newRow.innerHTML = `Paleta nr ${i+1}: 1 x ${tablicaDwuwymiarowa[0][1]} | Łączna ilość arkuszy: 1 | Maksymalna długość arkusza: ${Math.max(wymiar_dl)} | <br>`;
+            newRow.innerHTML = `Paleta nr ${i+1}: 1 x ${tablicaDwuwymiarowa[0][1]} | Łączna ilość arkuszy: 1 | Maksymalna długość arkusza: ${Math.max(wymiar_dl)} | Piętrowalność: N | <br>`;
             newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: Stelaż duży | Waga brutto: ${Math.round(((((wymiar_dl * waga_kg) + 15)*tablicaDwuwymiarowa[0][1]) * 100) / 100)+20} kg | Waga netto: ${Math.round((((wymiar_dl * waga_kg) + 15)*tablicaDwuwymiarowa[0][1]) * 100) / 100} | Dł-Szer-Wys: 126-110.5-98 | </span><br>Źródło: Płaska na wymiar | ID: ${LP_dok}`;
             wynikiDiv.appendChild(newRow);
         }
@@ -1158,7 +1158,8 @@ let jsonData = [];
         }
 
         function executeTerranoAction(text, waga_kg, LP_dok) {
-            let waga_total = Number(document.getElementById('rowWeightInput').value.replace(",", ".")) * 1000;
+
+            //let waga_total = Number(document.getElementById('rowWeightInput').value.replace(",", ".")) * 1000;
             let wynikiPoPierwszymPodziale = text.split("|");
             let tablicaDwuwymiarowa = [];
             for (let i = 0; i < wynikiPoPierwszymPodziale.length; i++) {
@@ -1199,10 +1200,10 @@ let jsonData = [];
             if(waga_kg === undefined){
                 var waga_kg = 4.72;
             }
-            if (waga_total){
+            /*if (waga_total){
                 var waga_kg = waga_total/sumaMB;
                 console.log(waga_kg);
-            }
+            }*/
             for (var i = 0; i < grupy.length; i++) {
                 var maxWartosc = 0;
                 var totalSheets = 0;
@@ -1220,7 +1221,7 @@ let jsonData = [];
                 let [paletaOpis, paletaDlugosc, caloscDlugosc, paletaWaga] = przypiszPaleteTerrano(maxWartosc);
                 var newRow = document.createElement("div");
                 newRow.className = "grupa";
-                newRow.innerHTML = `Paleta nr ${i + 1}: ${groupTexts} | Łączna ilość arkuszy: ${totalSheets} | Maksymalna długość arkusza: ${maxWartosc} | <br>`;
+                newRow.innerHTML = `Paleta nr ${i + 1}: ${groupTexts} | Łączna ilość arkuszy: ${totalSheets} | Maksymalna długość arkusza: ${maxWartosc} | Piętrowalność: Y | <br>`;
                 newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: ${paletaOpis} | Waga brutto: ${(Number(wagaPalety) + Number(paletaWaga)).toFixed(2)} kg | Waga netto: ${wagaPalety} kg | Dł-Szer-Wys: ${Math.round(((caloscDlugosc * 100) + Number.EPSILON) * 100) / 100}-60-69 | </span><br>Źródło: Terrano | ID: ${LP_dok}`;
                 wynikiDiv.appendChild(newRow);
             }
@@ -1305,7 +1306,7 @@ let jsonData = [];
                 let [paletaOpis, paletaDlugosc, caloscDlugosc, paletaWaga] = przypiszPaleteRetroDachowki(maxWartosc);
                 var newRow = document.createElement("div");
                 newRow.className = "grupa";
-                newRow.innerHTML = `Paleta nr ${i + 1}: ${groupTexts} | Łączna ilość arkuszy: ${totalSheets} | Maksymalna długość arkusza: ${maxWartosc} | <br>`;
+                newRow.innerHTML = `Paleta nr ${i + 1}: ${groupTexts} | Łączna ilość arkuszy: ${totalSheets} | Maksymalna długość arkusza: ${maxWartosc} | Piętrowalność: N | <br>`;
                 newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: ${paletaOpis} | Waga brutto: ${Number(paletaWaga) + Number(wagaPalety)} kg | Waga netto: ${wagaPalety} kg | Dł-Szer-Wys: ${Math.round(((caloscDlugosc * 100) + Number.EPSILON) * 100) / 100}-125-${((totalSheets*3)+12)/2} | </span><br>Źródło: Retro | ID: ${LP_dok}`;
                 wynikiDiv.appendChild(newRow);
             }
@@ -1380,7 +1381,7 @@ let jsonData = [];
                 let [paletaOpis, paletaDlugosc, caloscDlugosc, paletaWaga] = przypiszPaleteRetroDachowki(maxWartosc);
                 let newRow = document.createElement("div");
                 newRow.className = "grupa";
-                newRow.innerHTML = `Paleta nr ${i + 1}: ${groupTexts} | Łączna ilość arkuszy: ${totalSheets} | Maksymalna długość arkusza: ${maxWartosc} | <br>`;
+                newRow.innerHTML = `Paleta nr ${i + 1}: ${groupTexts} | Łączna ilość arkuszy: ${totalSheets} | Maksymalna długość arkusza: ${maxWartosc} | Piętrowalność: Y | <br>`;
                 newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: ${paletaOpis} | Waga brutto: ${(Number(wagaPalety) + Number(paletaWaga)).toFixed(2)} kg | Waga netto: ${wagaPalety} kg | Dł-Szer-Wys: ${Math.round(((caloscDlugosc * 100) + Number.EPSILON) * 100) / 100}-125-${Math.round(((((totalSheets*0.7)+12)) + Number.EPSILON) * 100) / 100} | </span><br>Źródło: Dachówki | ID: ${LP_dok}`;
                 wynikiDiv.appendChild(newRow);
             }
@@ -1454,7 +1455,7 @@ let jsonData = [];
                 let wagaPaletyb = (grupy[i].reduce((sum, row) => sum + row[2], 0) + 20).toFixed(2);
                 let newRow = document.createElement("div");
                 newRow.className = "grupa";
-                newRow.innerHTML = `Paleta nr ${i + 1}: ${groupTexts} | Łączna ilość arkuszy: ${totalSheets} | Maksymalna długość arkusza: ${maxWartosc} | <br>`;
+                newRow.innerHTML = `Paleta nr ${i + 1}: ${groupTexts} | Łączna ilość arkuszy: ${totalSheets} | Maksymalna długość arkusza: ${maxWartosc} | Piętrowalność: Y | <br>`;
                 newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: BRAK | Waga brutto: ${wagaPalety} kg | Waga netto: ${wagaPalety} kg | Dł-Szer-Wys: ${Math.round(((maxWartosc * 100) + Number.EPSILON) * 100) / 100}-125-${Math.round(((((totalSheets*0.7)+12)) + Number.EPSILON) * 100) / 100} | </span><br>Źródło: Trapezy | ID: ${LP_dok}`;
                 wynikiDiv.appendChild(newRow);
             }
@@ -1537,14 +1538,14 @@ let jsonData = [];
                         var weight = Number(100.0)*Number(waga_szt);
                         let newRow = document.createElement("div");
                         newRow.className = "grupa";
-                        newRow.innerHTML = `Paleta nr ${i}: 100 x 2 | Łączna ilość arkuszy: 100 | Maksymalna długość arkusza: 2 | <br>`;
+                        newRow.innerHTML = `Paleta nr ${i}: 100 x 2 | Łączna ilość arkuszy: 100 | Maksymalna długość arkusza: 2 | Piętrowalność: Y | <br>`;
                         newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: OP.PALETA.2M | Waga brutto: ${Number(weight+26)} kg | Waga netto: ${weight} kg | Dł-Szer-Wys: 200-125-20 | </span><br>Źródło: Arkusze | ID: ${LP_dok}`;
                         wynikiDiv.appendChild(newRow);
                     } else {
                         var weight = (Number(reszta) * Number(waga_szt)) + 12;
                         let newRow = document.createElement("div");
                         newRow.className = "grupa";
-                        newRow.innerHTML = `Paleta nr ${i}: ${reszta} x 2 | Łączna ilość arkuszy: ${reszta} | Maksymalna długość arkusza: 2 | <br>`;
+                        newRow.innerHTML = `Paleta nr ${i}: ${reszta} x 2 | Łączna ilość arkuszy: ${reszta} | Maksymalna długość arkusza: 2 | Piętrowalność: Y | <br>`;
                         newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: OP.PALETA.2M | Waga brutto: ${Number(weight+26)} kg | Waga netto: ${weight} kg | Dł-Szer-Wys: 200-125-${Math.round((((reszta*0.05)+12) + Number.EPSILON) * 100) / 100} | </span><br>Źródło: Arkusze | ID: ${LP_dok}`;
                         wynikiDiv.appendChild(newRow);
                     }
@@ -1555,7 +1556,7 @@ let jsonData = [];
                     var weight = Number(100.0)*Number(waga_szt);
                     let newRow = document.createElement("div");
                     newRow.className = "grupa";
-                    newRow.innerHTML = `Paleta nr ${i}: 100 x 2 | Łączna ilość arkuszy: 100 | Maksymalna długość arkusza: 2 | <br>`;
+                    newRow.innerHTML = `Paleta nr ${i}: 100 x 2 | Łączna ilość arkuszy: 100 | Maksymalna długość arkusza: 2 | Piętrowalność: Y | <br>`;
                     newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: OP.PALETA.2M | Waga brutto: ${Number(weight+26)} kg | Waga netto: ${weight} kg | Dł-Szer-Wys: 200-125-20 | </span><br>Źródło: Arkusze | ID: ${LP_dok}`;
                     wynikiDiv.appendChild(newRow);
                 }
@@ -1908,7 +1909,7 @@ let jsonData = [];
                 "LP", "Wymiary", "Łączna ilość arkuszy", 
                 "Maksymalna długość arkusza", "Rodzaj palety", 
                 "Waga brutto", "Waga netto", "Długość-Szerokość-Wysokość [cm]", 
-                "Źródło", "ID (ZS - Grupa - LP)"
+                "Źródło", "Piętrowalność?", "ID (ZS - Grupa - LP)"
             ]; 
 
             ws_data.push(headers);
@@ -1920,6 +1921,7 @@ let jsonData = [];
                 const paletaType = sourceMatch ? sourceMatch[1].trim() : "";
 
                 const id_match = rowText.match(/ID:\s*([^\n]+)/);
+                const ptr_match = rowText.match(/Piętrowalność:\s*([^\n|]+)/);
 
                 const id_ = id_match ? id_match[1].trim() : "";
 
@@ -1961,6 +1963,7 @@ let jsonData = [];
                     wagaNetto,              
                     wymiaryPalety,          
                     paletaType,
+                    ptr_match[1],
                     selectedPLtyp === "2" ? id_ : id_.split("-")[0]    
                 ]);
             });

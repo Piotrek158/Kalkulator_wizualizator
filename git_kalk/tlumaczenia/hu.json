@@ -1,0 +1,55 @@
+{
+    "menu": {
+      "auto": "Automat",
+      "manual": "Manual",
+      "palletList": "Lista Paletelor"
+    },
+    "popup": {
+      "title": "Introduceți Detaliile Paletei Tehnice",
+      "palletCount": "Număr de Palete",
+      "length": "Lungime",
+      "width": "Lățime",
+      "height": "Înălțime",
+      "netWeight": "Greutate Netă",
+      "grossWeight": "Greutate Brută",
+      "name": "Nume",
+      "stacking": "Stivuibilitate",
+      "add": "Adăugați",
+      "cancel": "Anulați"
+    },
+    "buttons": {
+        "add": "Adăugați",
+        "cancel": "Anulați",
+        "load": "Încărcați Fișier Excel",
+        "group": "Grupare",
+        "addTech": "Adăugați Paletă Tehnică",
+        "clearCalc": "Ștergeți Calculele",
+        "startAgain": "Reporniți",
+        "showHideDetails": "Afișați/Ascundeți Detaliile",
+        "genSolution": "Generați Soluția",
+        "genExport": "Generați Exportul",
+        "genTable": "Generați Tabel",
+        "exportGoodLoading": "Exportați la GoodLoading",
+        "exportPackingList": "Exportați Lista de Ambalare",
+        "usun": "Ștergeți",
+        "addToGrouping": "Selectați pentru Grupare"
+      },
+      "labele":{
+        "20Container": "Container 20\"",
+        "40Container": "Container 40\"",
+        "40HCContainer": "Container 40\" HC",
+        "semiTrailer": "Semi-Remorcă",
+        "Auto26T": "Camion 26T"
+      },
+      "packingList":{
+        "standardPL": "Lista Standard de Ambalare",
+        "rozszerzonyPL": "Lista Extinsă de Ambalare (experimental - poate conține erori)"
+      },
+      "listaPalet":{
+        "indeksPalety": "Index Paletă",
+        "dlugosc": "Lungime",
+        "szerokosc": "Lățime",
+        "wysokosc": "Înălțime",
+        "waga": "Greutate"
+      }
+}

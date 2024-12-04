@@ -13,7 +13,7 @@
     "netWeight": "Nettogewicht",
     "grossWeight": "Bruttogewicht",
     "name": "Name",
-    "stacking": "Stacking",
+    "stacking": "Stapelbarkeit",
     "add": "Hinzufügen",
     "cancel": "Abbrechen"
   },
@@ -24,12 +24,32 @@
       "group": "Gruppieren",
       "addTech": "Technische Palette hinzufügen",
       "clearCalc": "Berechnungen löschen",
-      "startAgain": "Neu beginnen",
+      "startAgain": "Neu starten",
       "showHideDetails": "Details anzeigen/verbergen",
       "genSolution": "Lösung generieren",
       "genExport": "Export generieren",
       "genTable": "Tabelle generieren",
-      "exportGoodLoading": "Export zu GoodLoading",
-      "exportPackingList": "Packliste exportieren"
+      "exportGoodLoading": "Zu GoodLoading exportieren",
+      "exportPackingList": "Packliste exportieren",
+      "usun": "Löschen",
+      "addToGrouping": "Zur Gruppierung auswählen"
+    },
+    "labele":{
+      "20Container": "20\" Container",
+      "40Container": "40\" Container",
+      "40HCContainer": "40\" HC Container",
+      "semiTrailer": "Sattelauflieger",
+      "Auto26T": "LKW 26T"
+    },
+    "packingList":{
+      "standardPL": "Standard-Packliste",
+      "rozszerzonyPL": "Erweiterte Packliste (experimentell - kann Fehler enthalten)"
+    },
+    "listaPalet":{
+      "indeksPalety": "Palettenindex",
+      "dlugosc": "Länge",
+      "szerokosc": "Breite",
+      "wysokosc": "Höhe",
+      "waga": "Gewicht"
     }
 }

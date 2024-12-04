@@ -193,6 +193,15 @@
             display: inline-block;
             
         }
+        #languageSelector {
+            width: auto; 
+            min-width: 100px; 
+            max-width: 200px; 
+            padding: 8px; 
+            font-size: 14px; 
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
         #dot2 {
             width: 20px;
             height: 20px;
@@ -441,14 +450,14 @@ let jsonData = [];
                         <div id="trybPracy" style="display: none;">auto</div>
                         <div class="dynamic-rows">
                                 <input type="file" id="fileUpload" accept=".xls,.xlsx" /><br><br>
-                                <button onclick="handleFile()">Wczytaj plik Excel</button><br><br>
-                                <button onclick="znajdz_zaznaczone_do_grupowania(jsonData)">Grupuj</button><br><br>
+                                <button data-translate="buttons.load" onclick="handleFile()"></button><br><br>
+                                <button data-translate="buttons.group" onclick="znajdz_zaznaczone_do_grupowania(jsonData)"></button><br><br>
                                 <div class="button-group">
 
-                                    <button onclick="showPopup()">Dodaj paletę techniczną</button>
-                                    <button onclick="clearAllRows()">Wyczyść Obliczenia</button>
-                                    <button onclick="reloadPage()">Zacznij od nowa</button>
-                                    <button onclick="widoczne_niewidoczne()">Pokaż-ukryj szczegóły</button><br><br>  <br />
+                                    <button data-translate="buttons.addTech" onclick="showPopup()"></button>
+                                    <button data-translate="buttons.clearCalc" onclick="clearAllRows()"></button>
+                                    <button data-translate="buttons.startAgain" onclick="reloadPage()"></button>
+                                    <button data-translate="buttons.showHideDetails" onclick="widoczne_niewidoczne()"></button><br><br>  <br />
                                 </div>
                                 <form class="radio-group">
                                     <label for="kontener1">
@@ -475,12 +484,12 @@ let jsonData = [];
                                     <div class="rowsContainerClass" id="rowsContainer">
                                     </div>
                                     <div id='podsumowanie' class='podsumowanie'></div><br><br>
-                                    <button onclick="programAuto(jsonData)">Generuj rozwiązanie</button><div id="dot"></div><br><br> 
+                                    <button data-translate="buttons.genSolution" onclick="programAuto(jsonData)"></button><div id="dot"></div><br><br> 
                                     
                                     <div id='wyniki' style='display:none;'></div>
-                                    <button onclick="generateTable()">Generuj eksport</button><div id="dot2"></div><br><br>
+                                    <button data-translate="buttons.genExport" onclick="generateTable()"></button><div id="dot2"></div><br><br>
                                     <div id="generatedTableContainer" style='display:none;'></div><br><br>
-                                    <button onclick="exportTableToExcel()">Eksportuj do GoodLoading</button><br><br>
+                                    <button data-translate="buttons.exportGoodLoading" onclick="exportTableToExcel()"></button><br><br>
                                     <form class="radio-group">
                                         <label for="Standard">
                                             <input type="radio" id="Standard" name="typPL" value="1" checked="checked">
@@ -491,7 +500,7 @@ let jsonData = [];
                                             Rozbudowany packing list (może zawierać błędy)
                                         </label>
                                     </form>   
-                                    <button onclick="exportPackingListToExcel()">Eksportuj packing list</button><br><br>
+                                    <button data-translate="buttons.exportPackingList" onclick="exportPackingListToExcel()"></button><br><br>
                         </div>
                     `;
                     break;

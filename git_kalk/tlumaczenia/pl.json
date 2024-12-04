@@ -16,7 +16,17 @@
       },
       "buttons": {
         "add": "Dodaj",
-        "cancel": "Anuluj"
+        "cancel": "Anuluj",
+        "load": "Wczytaj plik Excel",
+        "group": "Grupuj",
+        "addTech": "Dodaj paletę techniczną",
+        "clearCalc": "Wyczyść obliczenia",
+        "startAgain": "Zacznij od nowa",
+        "showHideDetails": "Pokaż-ukryj szczegóły",
+        "genSolution": "Generuj rozwiązanie",
+        "genExport": "Generuj export",
+        "exportGoodLoading": "Eksportuj do GoodLoading",
+        "exportPackingList": "Eksportuj packing list"
       }
     }
 }

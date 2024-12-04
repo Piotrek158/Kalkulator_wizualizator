@@ -30,6 +30,7 @@
       "showHideDetails": "Details anzeigen/verbergen",
       "genSolution": "Lösung generieren",
       "genExport": "Export generieren",
+      "genTable": "Table generieren",
       "exportGoodLoading": "Export zu GoodLoading",
       "exportPackingList": "Packliste exportieren"
     }

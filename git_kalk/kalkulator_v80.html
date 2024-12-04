@@ -526,13 +526,13 @@ let jsonData = [];
                                         <input type="text" id="rowTextInput" placeholder="ilość x długość | ilość x długość - na przykład 5 x 4,5 | 6 x 3,2">
                                         <input type="text" id="rowWeightInput" placeholder="Waga w tonach np. 0,75">
 
-                                        <button onclick="addRow()">Dodaj</button>
+                                        <button data-translate="buttons.add" onclick="addRow()"></button>
                                 </div>
                                 <div class="button-group">
 
-                                    <button onclick="showPopup()">Dodaj paletę techniczną</button>
-                                    <button onclick="clearAllRows()">Wyczyść Obliczenia</button>
-                                    <button onclick="reloadPage()">Zacznij od nowa</button> <br />
+                                    <button data-translate="buttons.addTech" onclick="showPopup()"></button>
+                                    <button data-translate="buttons.clearCalc" onclick="clearAllRows()"></button>
+                                    <button data-translate="buttons.startAgain" onclick="reloadPage()"></button> <br />
                                 </div>
                                 <form class="radio-group">
                                     <label for="kontener1">
@@ -561,10 +561,10 @@ let jsonData = [];
                         </div>
                             <div id='wyniki'></div>
                             <div id='podsumowanie' class='podsumowanie'></div><br><br>
-                            <button onclick="generateTable()">Generuj tabelkę</button><br><br>
+                            <button data-translate="buttons.genTable" onclick="generateTable()"></button><br><br>
                             <div id="generatedTableContainer"></div><br><br>
-                            <button onclick="exportTableToExcel()">Eksportuj do GoodLoading</button><br><br>
-                            <button onclick="exportPackingListToExcel()">Eksportuj packing list</button><br><br>
+                            <button data-translate="buttons.exportGoodLoading" onclick="exportTableToExcel()">Eksportuj do GoodLoading</button><br><br>
+                            <button data-translate="buttons.exportPackingList" onclick="exportPackingListToExcel()">Eksportuj packing list</button><br><br>
                     `;
                     translatePage();
                     break;

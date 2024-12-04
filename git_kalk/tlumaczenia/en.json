@@ -30,6 +30,7 @@
       "showHideDetails": "Show-Hide Details",
       "genSolution": "Generate Solution",
       "genExport": "Generate Export",
+      "genTable": "Generate Table",
       "exportGoodLoading": "Export to GoodLoading",
       "exportPackingList": "Export Packing List"
     }

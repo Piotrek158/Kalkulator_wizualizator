@@ -1382,7 +1382,7 @@ let jsonData = [];
                 let newRow = document.createElement("div");
                 newRow.className = "grupa";
                 newRow.innerHTML = `Paleta nr ${i + 1}: ${groupTexts} | Łączna ilość arkuszy: ${totalSheets} | Maksymalna długość arkusza: ${maxWartosc} | Piętrowalność: Y | <br>`;
-                newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: ${paletaOpis} | Waga brutto: ${(Number(wagaPalety) + Number(paletaWaga)).toFixed(2)} kg | Waga netto: ${wagaPalety} kg | Dł-Szer-Wys: ${Math.round(((caloscDlugosc * 100) + Number.EPSILON) * 100) / 100}-125-${Math.round(((((totalSheets*0.7)+12)) + Number.EPSILON) * 100) / 100} | </span><br>Źródło: Dachówki | ID: ${LP_dok}`;
+                newRow.innerHTML += `<span class='czerwony-tekst'>Paleta: ${paletaOpis} | Waga brutto: ${(Number(wagaPalety) + Number(paletaWaga)).toFixed(2)} kg | Waga netto: ${wagaPalety} kg | Dł-Szer-Wys: ${Math.round(((caloscDlugosc * 100) + Number.EPSILON) * 100) / 100}-125-${Math.round(((((totalSheets*0.07)+12)) + Number.EPSILON) * 100) / 100} | </span><br>Źródło: Dachówki | ID: ${LP_dok}`;
                 wynikiDiv.appendChild(newRow);
             }
         }
